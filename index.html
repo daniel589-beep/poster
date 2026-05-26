@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Póster Integrador – Electrónica Analógica III</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rojo:        #C8102E;
+    --rojo-oscuro: #8B0000;
+    --rojo-medio:  #A80D24;
+    --rojo-suave:  #FCEEF0;
+    --blanco:      #FFFFFF;
+    --gris-claro:  #F5F5F7;
+    --gris-medio:  #DEDEDE;
+    --gris-texto:  #3D3D3D;
+    --negro:       #111111;
+    --negro-suave: #1E1E1E;
+    --oro:         #C9A535;
+    --oro-suave:   #FFF8E1;
+    --azul-tec:    #1C3A5E;
+    --verde-ok:    #0A6B3E;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body { width:2362px; background:#ccc; font-family:'DM Sans',sans-serif; }
+
+  .poster {
+    width:2362px;
+    background:var(--blanco);
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ═══════════════════ HEADER ═══════════════════ */
+  .header { background:var(--negro); padding:0; position:relative; overflow:hidden; }
+  .header-stripe {
+    height:8px;
+    background:linear-gradient(90deg,var(--rojo-oscuro) 0%,var(--rojo) 40%,var(--oro) 60%,var(--rojo) 80%,var(--rojo-oscuro) 100%);
+  }
+  .header-inner {
+    padding:52px 90px 46px;
+    display:flex; gap:60px; align-items:center;
+    position:relative; z-index:2;
+  }
+  .header::before {
+    content:''; position:absolute; inset:0;
+    background-image:
+      radial-gradient(circle at 85% 30%,rgba(200,16,46,.18) 0%,transparent 50%),
+      radial-gradient(circle at 10% 80%,rgba(201,165,53,.10) 0%,transparent 40%);
+    z-index:1;
+  }
+  .logo-usco {
+    width:155px;height:155px;border-radius:50%;
+    border:3px solid var(--oro);background:var(--blanco);
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;overflow:hidden;
+    box-shadow:0 0 0 6px rgba(201,165,53,.2);
+  }
+  .logo-usco img { width:145px;height:145px;object-fit:contain;border-radius:50%; }
+  .header-title-block { flex:1; }
+  .header-badge {
+    display:inline-flex;align-items:center;gap:14px;
+    background:rgba(200,16,46,.25);border:1px solid rgba(200,16,46,.5);
+    color:rgba(255,255,255,.85);font-size:20px;font-weight:600;
+    letter-spacing:3px;text-transform:uppercase;
+    padding:7px 22px;border-radius:4px;margin-bottom:16px;
+  }
+  .badge-dot { width:8px;height:8px;background:var(--rojo);border-radius:50%;animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:.3} }
+  .header h1 {
+    font-family:'Playfair Display',serif;
+    font-size:68px;font-weight:900;color:var(--blanco);
+    line-height:1.08;letter-spacing:-1px;margin-bottom:14px;
+  }
+  .header h1 em { font-style:italic;color:var(--oro); }
+  .header-meta { display:flex;gap:36px;flex-wrap:wrap; }
+  .header-meta span {
+    color:rgba(255,255,255,.6);font-size:22px;font-weight:500;
+    display:flex;align-items:center;gap:8px;
+  }
+  .header-meta span::before { content:'·';color:var(--oro);font-size:28px;line-height:1; }
+  .header-meta span:first-child::before { display:none; }
+  .header-right { display:flex;flex-direction:column;align-items:flex-end;gap:20px;flex-shrink:0; }
+  .autores-label { color:var(--oro);font-size:17px;font-weight:700;letter-spacing:4px;text-transform:uppercase;text-align:right;margin-bottom:12px; }
+  .autores-list { display:flex;flex-direction:column;gap:6px;align-items:flex-end; }
+  .autor-item { text-align:right;color:var(--blanco);font-size:20px;font-weight:600;line-height:1.4; }
+  .autor-item span { font-family:'JetBrains Mono',monospace;font-size:16px;color:rgba(255,255,255,.45);font-weight:400;margin-left:10px; }
+  .docente-block { background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:12px 20px;text-align:right; }
+  .docente-label { color:var(--oro);font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px; }
+  .docente-name { color:var(--blanco);font-size:22px;font-weight:600; }
+
+  /* ═══════════════════ BANDA EQUIPO ═══════════════════ */
+  .equipo-band {
+    background:var(--rojo-suave);border-top:4px solid var(--rojo);border-bottom:3px solid var(--gris-medio);
+    padding:36px 90px;display:flex;align-items:center;gap:80px;
+  }
+  .equipo-label {
+    font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--rojo-oscuro);
+    flex-shrink:0;writing-mode:vertical-rl;transform:rotate(180deg);letter-spacing:2px;
+    border-left:4px solid var(--rojo);padding-left:14px;height:160px;
+    display:flex;align-items:center;
+  }
+  .fotos-integrantes { display:flex;gap:70px;flex:1;justify-content:center; }
+  .foto-integrante { display:flex;flex-direction:column;align-items:center;gap:12px; }
+  .foto-circle {
+    width:165px;height:165px;border-radius:50%;border:4px solid var(--rojo);
+    overflow:hidden;background:var(--blanco);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 20px rgba(200,16,46,.2);
+  }
+  .foto-circle img { width:100%;height:100%;object-fit:cover;border-radius:50%; }
+  .foto-nombre { font-size:19px;font-weight:700;color:var(--negro);text-align:center;line-height:1.3;max-width:190px; }
+  .foto-codigo { font-family:'JetBrains Mono',monospace;font-size:15px;color:var(--rojo);font-weight:600; }
+
+  /* ═══════════════════ LEAN JOURNEY STRIP ═══════════════════ */
+  .journey-strip {
+    background:var(--rojo-suave);
+    border-bottom:4px solid var(--gris-medio);
+    padding:32px 90px;
+    display:flex;align-items:center;gap:0;
+  }
+  .journey-eyebrow {
+    font-size:16px;font-weight:700;letter-spacing:4px;text-transform:uppercase;
+    color:var(--rojo-oscuro);margin-right:60px;flex-shrink:0;
+    writing-mode:vertical-rl;transform:rotate(180deg);
+    border-left:3px solid var(--rojo);padding-left:12px;
+    height:100px;display:flex;align-items:center;
+  }
+  .journey-nodes { display:flex;align-items:center;flex:1;gap:0; }
+  .journey-node { display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;padding:0 16px;text-align:center; }
+  .jn-circle {
+    width:62px;height:62px;border-radius:50%;
+    border:3px solid var(--gris-medio);background:var(--blanco);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:#bbb;
+  }
+  .journey-node.done .jn-circle { border-color:var(--rojo);background:var(--rojo-suave);color:var(--rojo); }
+  .journey-node.final .jn-circle { border-color:var(--oro);background:var(--oro-suave);color:var(--oro);box-shadow:0 0 18px rgba(201,165,53,.3); }
+  .jn-title { font-size:19px;font-weight:700;color:#aaa;line-height:1.2;max-width:200px; }
+  .journey-node.done .jn-title { color:var(--negro); }
+  .journey-node.final .jn-title { color:#7A5000;font-size:20px; }
+  .jn-sub { font-family:'JetBrains Mono',monospace;font-size:14px;color:#bbb;letter-spacing:2px;text-transform:uppercase; }
+  .journey-node.done .jn-sub { color:var(--rojo);opacity:.8; }
+  .journey-node.final .jn-sub { color:var(--oro); }
+  .journey-conn {
+    flex-shrink:0;color:var(--rojo);font-size:26px;font-weight:900;opacity:.5;padding:0 4px;
+  }
+
+  /* ═══════════════════ SEPARADOR ═══════════════════ */
+  .sep { height:5px;background:linear-gradient(90deg,transparent,var(--rojo-oscuro) 15%,var(--rojo) 40%,var(--oro) 50%,var(--rojo) 60%,var(--rojo-oscuro) 85%,transparent);margin:0 90px;border-radius:2px; }
+  .sep-label { text-align:center;padding:32px 0 8px;font-family:'Playfair Display',serif;font-size:40px;font-weight:900;color:var(--negro);letter-spacing:-.5px; }
+  .sep-label span { color:var(--rojo); }
+  .sep-sub { text-align:center;font-size:21px;color:#777;padding-bottom:28px; }
+
+  /* ═══════════════════ GRID PROYECTOS ═══════════════════ */
+  .proyectos-grid { display:grid;grid-template-columns:1fr 1fr;gap:36px;padding:0 90px 44px; }
+
+  .proyecto-card {
+    background:var(--blanco);border-radius:18px;overflow:hidden;
+    box-shadow:0 6px 32px rgba(0,0,0,.09);border:1.5px solid var(--gris-medio);
+    display:flex;flex-direction:column;
+  }
+  .card-header {
+    background:var(--rojo);padding:26px 34px;
+    display:flex;align-items:flex-start;gap:22px;
+    position:relative;overflow:hidden;
+  }
+  .card-header::after {
+    content:'';position:absolute;bottom:-30px;right:-30px;
+    width:120px;height:120px;background:rgba(255,255,255,.08);border-radius:50%;
+  }
+  .card-header.dark { background:linear-gradient(135deg,var(--negro-suave) 0%,var(--azul-tec) 100%); }
+  .card-header.verde { background:linear-gradient(135deg,var(--verde-ok) 0%,#0D8A50 100%); }
+  .card-header.dorado { background:linear-gradient(135deg,#7A5000 0%,var(--oro) 100%); }
+  .card-header.gradient { background:linear-gradient(135deg,var(--rojo-oscuro) 0%,var(--rojo) 100%); }
+  .card-num { font-family:'Playfair Display',serif;font-size:58px;font-weight:900;color:rgba(255,255,255,.18);line-height:1;flex-shrink:0;position:relative;z-index:1; }
+  .card-header-text { position:relative;z-index:1;flex:1; }
+  .card-tag { font-size:15px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.65);margin-bottom:6px; }
+  .card-header-text h3 { font-family:'Playfair Display',serif;font-size:34px;font-weight:700;color:var(--blanco);line-height:1.2; }
+
+  /* Lean bar */
+  .lean-bar { display:flex;border-bottom:2px solid var(--gris-medio); }
+  .lb-step {
+    flex:1;padding:11px 18px;
+    font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+    display:flex;align-items:center;gap:8px;
+    border-right:1px solid rgba(0,0,0,.07);
+  }
+  .lb-step:last-child { border-right:none; }
+  .lb-step.problema  { background:#fce4e8;color:var(--rojo-oscuro); }
+  .lb-step.solucion  { background:#e8f0f8;color:var(--azul-tec); }
+  .lb-step.validacion{ background:#e6f5ec;color:var(--verde-ok); }
+  .lb-step.evolucion { background:var(--oro-suave);color:#7A5000; }
+
+  .card-body { padding:32px 34px 28px;flex:1;display:flex;flex-direction:column;gap:22px; }
+
+  .card-section-title {
+    font-size:16px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+    color:var(--rojo);border-bottom:2px solid var(--rojo-suave);padding-bottom:8px;margin-bottom:2px;
+  }
+
+  /* Narrative boxes */
+  .problema-box {
+    background:var(--rojo-suave);border-left:5px solid var(--rojo);
+    border-radius:0 10px 10px 0;padding:18px 22px;
+    font-size:22px;color:var(--negro);line-height:1.55;
+  }
+  .problema-box strong { color:var(--rojo-oscuro); }
+  .aprendizaje-box {
+    background:var(--oro-suave);border-left:5px solid var(--oro);
+    border-radius:0 10px 10px 0;padding:16px 22px;
+    font-size:21px;color:#5a3d00;line-height:1.55;
+  }
+  .aprendizaje-box strong { color:#7A5000; }
+  .evolucion-box {
+    background:var(--negro);border-radius:10px;padding:16px 22px;
+    display:flex;align-items:center;gap:16px;
+    font-size:20px;color:rgba(255,255,255,.8);font-weight:600;
+  }
+  .evolucion-box .ev-ico { font-size:26px; }
+  .evolucion-box .ev-arrow { color:var(--oro);font-size:28px;margin-left:auto; }
+
+  /* Card images */
+  .card-imgs { display:flex;gap:14px; }
+  .card-img-wrap { flex:1;border-radius:10px;overflow:hidden;border:2px solid var(--gris-medio);background:var(--gris-claro); }
+  .card-img-wrap img { width:100%;height:230px;object-fit:contain;display:block;background:var(--gris-claro); }
+  .card-img-wrap.dark-bg img { background:#1a2a6c;object-fit:cover; }
+  .card-img-wrap.tall img { height:280px; }
+  .card-img-cap { text-align:center;font-size:15px;font-weight:600;color:#888;padding:7px 8px;background:var(--gris-claro);border-top:1px solid var(--gris-medio); }
+  .card-img-cap.red { background:var(--rojo-oscuro);color:rgba(255,255,255,.8); }
+
+  .card-desc { font-size:22px;color:var(--gris-texto);line-height:1.65; }
+  .card-desc strong { color:var(--negro); }
+
+  /* Mini table */
+  .tabla-mini { width:100%;border-collapse:collapse;font-size:19px; }
+  .tabla-mini th { background:var(--rojo);color:var(--blanco);padding:8px 14px;text-align:left;font-weight:700;font-size:17px; }
+  .tabla-mini td { padding:8px 14px;border-bottom:1px solid var(--gris-medio);color:var(--gris-texto); }
+  .tabla-mini tr:nth-child(even) td { background:var(--rojo-suave); }
+  .ok { color:var(--verde-ok);font-weight:700; }
+
+  /* 5-icon grid P1 */
+  .cinco-circuitos { display:grid;grid-template-columns:repeat(5,1fr);gap:12px; }
+  .circ-card {
+    background:var(--rojo-suave);border-radius:10px;padding:16px 12px;
+    border-top:4px solid var(--rojo);text-align:center;
+    display:flex;flex-direction:column;gap:6px;
+  }
+  .circ-icon { font-size:30px; }
+  .circ-name { font-weight:700;font-size:19px;color:var(--negro);font-family:'JetBrains Mono',monospace; }
+  .circ-sub { font-size:16px;color:#777;line-height:1.3; }
+
+  /* Signal chain P2 */
+  .chain-diagram {
+    background:var(--gris-claro);border-radius:12px;padding:18px 20px;
+    display:flex;align-items:center;gap:6px;flex-wrap:nowrap;justify-content:center;
+  }
+  .chain-block { background:var(--blanco);border-radius:8px;border:2px solid var(--gris-medio);padding:14px 16px;text-align:center;min-width:155px; }
+  .chain-block.inp  { border-color:var(--azul-tec); }
+  .chain-block.amp  { border-color:var(--rojo); }
+  .chain-block.filt { border-color:var(--verde-ok); }
+  .chain-block.out  { border-color:var(--oro);background:var(--oro-suave); }
+  .cb-label { font-size:14px;color:#888;font-weight:600;text-transform:uppercase;letter-spacing:1px; }
+  .cb-name  { font-size:20px;font-weight:700;color:var(--negro);margin:4px 0 2px; }
+  .cb-val   { font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:600; }
+  .chain-block.inp  .cb-val { color:var(--azul-tec); }
+  .chain-block.amp  .cb-val { color:var(--rojo); }
+  .chain-block.filt .cb-val { color:var(--verde-ok); }
+  .chain-block.out  .cb-val { color:#7A5000; }
+  .chain-arrow { font-size:26px;color:var(--rojo);font-weight:900;flex-shrink:0; }
+
+  /* PCB compare P3 */
+  .pcb-compare { display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:center; }
+  .pcb-col { background:var(--gris-claro);border-radius:12px;padding:20px 22px;border-top:5px solid; }
+  .pcb-col.proto { border-color:#bbb; }
+  .pcb-col.pcb   { border-color:var(--verde-ok); }
+  .pcb-col-title { font-size:22px;font-weight:700;margin-bottom:12px; }
+  .pcb-col.proto .pcb-col-title { color:#888; }
+  .pcb-col.pcb   .pcb-col-title { color:var(--verde-ok); }
+  .pcb-row { display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--gris-medio);font-size:20px;color:var(--gris-texto); }
+  .pcb-row:last-child { border-bottom:none; }
+  .pcb-arrow-col { text-align:center;font-size:52px;color:var(--rojo);font-weight:900; }
+
+  /* ECG containers */
+  .ecg-wrap { background:var(--blanco);border:2px solid var(--gris-medio);border-radius:12px;overflow:hidden; }
+  .ecg-label-bar {
+    background:var(--negro);color:rgba(255,255,255,.75);
+    padding:9px 18px;font-size:17px;font-weight:600;
+    display:flex;align-items:center;gap:10px;
+  }
+  .ecg-label-bar .dot { width:10px;height:10px;border-radius:50%;background:var(--rojo);flex-shrink:0;animation:pulse 1.5s infinite; }
+
+  /* Module flow P4 */
+  .modulos-flow { display:flex;align-items:stretch;background:var(--gris-claro);border-radius:10px;overflow:hidden; }
+  .modulo-box {
+    flex:1;padding:14px 12px;text-align:center;background:var(--blanco);
+    border-right:2px solid var(--gris-medio);
+    display:flex;flex-direction:column;gap:4px;
+  }
+  .modulo-box:last-child { border-right:none; }
+  .mb-num { font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:var(--rojo);letter-spacing:2px; }
+  .mb-name { font-size:19px;font-weight:700;color:var(--negro);line-height:1.2; }
+  .mb-comp { font-size:16px;color:#888;font-family:'JetBrains Mono',monospace; }
+  .modulo-arrow { display:flex;align-items:center;padding:0 8px;color:var(--rojo);font-size:22px;font-weight:900;background:var(--gris-claro);flex-shrink:0; }
+
+  /* P5 layout */
+  .p5-body { display:grid;grid-template-columns:1fr 1fr;gap:44px;padding:32px 34px 28px; }
+  .p5-col { display:flex;flex-direction:column;gap:22px; }
+
+  /* Anomaly 4-panel */
+  .anomalias-visual { display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:18px; }
+  .anomalia-card { background:var(--blanco);border-radius:12px;overflow:hidden;border:2px solid var(--gris-medio);box-shadow:0 3px 14px rgba(0,0,0,.06); }
+  .anomalia-card-header { padding:13px 16px;font-weight:700;font-size:20px;display:flex;align-items:center;gap:9px;border-bottom:2px solid var(--gris-medio); }
+  .anomalia-card-header.normal  { background:#e8f5ec;color:var(--verde-ok); }
+  .anomalia-card-header.hypert  { background:var(--rojo-suave);color:var(--rojo-oscuro); }
+  .anomalia-card-header.tinvert { background:var(--rojo-suave);color:var(--rojo-oscuro); }
+  .anomalia-card-header.fibril  { background:var(--oro-suave);color:#7A5000; }
+  .anomalia-trace { background:#fafafa;padding:8px; }
+  .anomalia-desc { padding:12px 16px;font-size:18px;color:var(--gris-texto);line-height:1.45;border-top:1px solid var(--gris-medio); }
+  .anomalia-desc strong { color:var(--negro); }
+
+  .val-table-label { font-size:15px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:8px; }
+
+  /* ═══════════════════ FOOTER ═══════════════════ */
+  .footer {
+    background:var(--negro-suave);padding:50px 90px 44px;
+    display:grid;grid-template-columns:1fr auto 1fr;gap:60px;
+    align-items:start;border-top:5px solid var(--rojo);
+  }
+  .referencias h4 { color:var(--oro);font-size:17px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px; }
+  .referencias ol { padding-left:22px; }
+  .referencias ol li { color:rgba(255,255,255,.6);font-size:17px;line-height:1.65;margin-bottom:8px; }
+  .qr-block { display:flex;flex-direction:column;align-items:center;gap:14px; }
+  .qr-label { color:var(--oro);font-size:17px;font-weight:700;letter-spacing:3px;text-transform:uppercase; }
+  .qr-box { width:175px;height:175px;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center; }
+  .qr-sub { color:rgba(255,255,255,.35);font-size:15px;text-align:center;max-width:220px;line-height:1.5; }
+  .footer-right { display:flex;flex-direction:column;align-items:flex-end;gap:14px; }
+  .fr-logo { width:70px;height:70px;background:rgba(255,255,255,.08);border-radius:50%;border:2px solid var(--oro);display:flex;align-items:center;justify-content:center;font-size:28px; }
+  .fr-title { color:var(--blanco);font-size:22px;font-weight:700;text-align:right; }
+  .fr-sub { color:rgba(255,255,255,.45);font-size:17px;line-height:1.6;text-align:right; }
+  .fr-year { font-family:'Playfair Display',serif;font-size:40px;font-weight:900;color:var(--oro); }
+
+  .hl { color:var(--rojo);font-weight:700; }
+</style>
+</head>
+<body>
+<div class="poster">
+
+<!-- ══════════════════════ HEADER ══════════════════════ -->
+<div class="header">
+  <div class="header-stripe"></div>
+  <div class="header-inner">
+    <div class="logo-usco">
+      <img src="images/img_1.jpg" alt="Logo USCO" />
+    </div>
+    <div class="header-title-block">
+      <div class="header-badge">
+        <div class="badge-dot"></div>
+        Electrónica Analógica III &nbsp;·&nbsp; 2026
+      </div>
+      <h1>Del Amplificador Operacional<br>al <em>Prototipo Biomédico ECG</em></h1>
+      <div class="header-meta">
+        <span>Universidad Surcolombiana</span>
+        <span>Neiva, Huila — Colombia</span>
+        <span>Ingeniería Electrónica</span>
+        <span>Semestre 2026-I</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div>
+        <div class="autores-label">Autores del proyecto</div>
+        <div class="autores-list">
+          <div class="autor-item">Emerson Felipe Barrera Ramos <span>20241221637</span></div>
+          <div class="autor-item">Dominy Melandri Cadena Soto <span>20241221638</span></div>
+          <div class="autor-item">Daniel Stiven Olarte Fernández <span>20241221589</span></div>
+          <div class="autor-item">Jerónimo Pérez Pérez <span>20241221419</span></div>
+        </div>
+      </div>
+      <div class="docente-block">
+        <div class="docente-label">Docente</div>
+        <div class="docente-name">Ing. Julián Adolfo Ramírez Gutiérrez</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ BANDA EQUIPO ══════════════════════ -->
+<div class="equipo-band">
+  <div class="equipo-label">Equipo</div>
+  <div class="fotos-integrantes">
+    <div class="foto-integrante">
+      <div class="foto-circle"><img src="images/img_2.jpg" alt="Emerson Barrera" /></div>
+      <div class="foto-nombre">Emerson Felipe<br>Barrera Ramos</div>
+      <div class="foto-codigo">20241221637</div>
+    </div>
+    <div class="foto-integrante">
+      <div class="foto-circle"><img src="images/img_3.jpg" alt="Dominy Cadena" /></div>
+      <div class="foto-nombre">Dominy Melandri<br>Cadena Soto</div>
+      <div class="foto-codigo">20241221638</div>
+    </div>
+    <div class="foto-integrante">
+      <div class="foto-circle"><img src="images/img_4.jpg" alt="Daniel Olarte" /></div>
+      <div class="foto-nombre">Daniel Stiven<br>Olarte Fernández</div>
+      <div class="foto-codigo">20241221589</div>
+    </div>
+    <div class="foto-integrante">
+      <div class="foto-circle"><img src="images/img_5.jpg" alt="Jerónimo Pérez" /></div>
+      <div class="foto-nombre">Jerónimo<br>Pérez Pérez</div>
+      <div class="foto-codigo">20241221419</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ LEAN JOURNEY STRIP ══════════════════════ -->
+<div class="journey-strip">
+  <div class="journey-eyebrow">Recorrido del Curso</div>
+  <div class="journey-nodes">
+    <div class="journey-node done">
+      <div class="jn-circle">01</div>
+      <div class="jn-title">Op-Amps Avanzados</div>
+      <div class="jn-sub">Fundamentos</div>
+    </div>
+    <div class="journey-conn">→</div>
+    <div class="journey-node done">
+      <div class="jn-circle">02</div>
+      <div class="jn-title">Lean Startup<br>MVP Termopar</div>
+      <div class="jn-sub">Metodología</div>
+    </div>
+    <div class="journey-conn">→</div>
+    <div class="journey-node done">
+      <div class="jn-circle">03</div>
+      <div class="jn-title">PCB &amp; Manufactura<br>Digital</div>
+      <div class="jn-sub">Fabricación</div>
+    </div>
+    <div class="journey-conn">→</div>
+    <div class="journey-node done">
+      <div class="jn-circle">04</div>
+      <div class="jn-title">Diseño Conceptual<br>Sintetizador ECG</div>
+      <div class="jn-sub">Marco de diseño</div>
+    </div>
+    <div class="journey-conn" style="color:var(--oro);opacity:.9;">→</div>
+    <div class="journey-node final">
+      <div class="jn-circle">05</div>
+      <div class="jn-title">Sintetizador ECG<br>Implementado</div>
+      <div class="jn-sub">Prototipo final</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SECTION HEADER ══════════════════════ -->
+<div style="padding:36px 0 0;">
+  <div class="sep-label">Una Historia de <span>Evolución</span> — 5 Proyectos</div>
+  <div class="sep-sub">Guiada por la metodología Lean Startup · Del circuito básico al instrumento biomédico</div>
+  <div style="margin:0 90px;"><div class="sep"></div></div>
+</div>
+
+<!-- ══════════════════════ PROYECTOS P1–P4 ══════════════════════ -->
+<div class="proyectos-grid" style="padding-top:36px;">
+
+  <!-- ════ P1 ════ -->
+  <div class="proyecto-card">
+    <div class="card-header">
+      <div class="card-num">01</div>
+      <div class="card-header-text">
+        <div class="card-tag">Proyecto 1 · Fundamentos</div>
+        <h3>Aplicaciones Avanzadas de<br>Amplificadores Operacionales</h3>
+      </div>
+    </div>
+    <div class="lean-bar">
+      <div class="lb-step problema">⚠ ¿Qué puede hacer un op-amp?</div>
+      <div class="lb-step solucion">⚙ 5 Topologías implementadas</div>
+      <div class="lb-step validacion">✔ Multisim + Rigol validados</div>
+      <div class="lb-step evolucion">→ Base reutilizable para P2</div>
+    </div>
+    <div class="card-body">
+
+      <div class="problema-box">
+        ¿Puede un op-amp filtrar ruido, generar señales periódicas y amplificar con alta precisión diferencial? <strong>El laboratorio responde antes que la teoría.</strong>
+      </div>
+
+      <div class="card-imgs">
+        <div class="card-img-wrap tall">
+          <img src="images/img_6.png" alt="Oscilador Wien UA741" />
+          <div class="card-img-cap">Oscilador Wien — UA741 · f₀ = 1590 Hz</div>
+        </div>
+      </div>
+
+      <div class="card-section-title">Cinco circuitos — Cinco herramientas</div>
+      <div class="cinco-circuitos">
+        <div class="circ-card">
+          <div class="circ-icon">⚡</div>
+          <div class="circ-name">F/V</div>
+          <div class="circ-sub">Conversor Frecuencia / Voltaje</div>
+        </div>
+        <div class="circ-card">
+          <div class="circ-icon">🎚</div>
+          <div class="circ-name">IA</div>
+          <div class="circ-sub">Amp. de Instrumentación TL084</div>
+        </div>
+        <div class="circ-card">
+          <div class="circ-icon">〰</div>
+          <div class="circ-name">SK</div>
+          <div class="circ-sub">Filtro Sallen-Key Butterworth 2°</div>
+        </div>
+        <div class="circ-card">
+          <div class="circ-icon">◼</div>
+          <div class="circ-name">ST</div>
+          <div class="circ-sub">Schmitt Trigger histéresis ±1.92 V</div>
+        </div>
+        <div class="circ-card">
+          <div class="circ-icon">♾</div>
+          <div class="circ-name">Wien</div>
+          <div class="circ-sub">Oscilador Wien · error 0.10%</div>
+        </div>
+      </div>
+
+      <table class="tabla-mini">
+        <tr><th>Circuito</th><th>Resultado clave</th><th>Estado</th></tr>
+        <tr><td>Amp. de Instrumentación</td><td>CMRR = 40.26 dB · error &lt; 4%</td><td><span class="ok">✔ Validado</span></td></tr>
+        <tr><td>Filtro Sallen-Key</td><td>Caída −40 dB/dec confirmada</td><td><span class="ok">✔ Validado</span></td></tr>
+        <tr><td>Oscilador Wien</td><td>f₀ = 1590 Hz · error 0.10%</td><td><span class="ok">✔ Validado</span></td></tr>
+      </table>
+
+      <div class="aprendizaje-box">
+        <strong>Transferencia directa:</strong> El amplificador de instrumentación y el filtro Sallen-Key del P1 se convirtieron en las etapas centrales del acondicionador de termopar. Los bloques son reutilizables por diseño.
+      </div>
+
+      <div class="evolucion-box">
+        <span class="ev-ico">🔧</span>
+        <span>Las herramientas están probadas. El P2 aplica estos bloques para resolver un problema industrial real.</span>
+        <span class="ev-arrow">→</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════ P2 ════ -->
+  <div class="proyecto-card">
+    <div class="card-header dark">
+      <div class="card-num">02</div>
+      <div class="card-header-text">
+        <div class="card-tag">Proyecto 2 · Lean Startup</div>
+        <h3>Acondicionador de Termopar<br>para CESURCAFÉ</h3>
+      </div>
+    </div>
+    <div class="lean-bar">
+      <div class="lb-step problema" style="background:#e4ebf5;color:var(--azul-tec);">⚠ Sin datos de temperatura</div>
+      <div class="lb-step solucion">⚙ Cadena analógica completa</div>
+      <div class="lb-step validacion">✔ G medido: 493 (error 0.4%)</div>
+      <div class="lb-step evolucion">↻ Pivote: módulo de alarma</div>
+    </div>
+    <div class="card-body">
+
+      <div class="problema-box" style="border-color:var(--azul-tec);background:#ecf1f8;">
+        En la sala de tueste de <strong>CESURCAFÉ</strong>, el "primer crack" del café (≈ 204°C) se estimaba por <strong>sonido</strong>. Sin datos continuos de temperatura → sin control de calidad real → variabilidad entre lotes.
+      </div>
+
+      <div class="card-imgs">
+        <div class="card-img-wrap">
+          <img src="images/img_7.jpg" alt="Simulación Multisim" />
+          <div class="card-img-cap red">Simulación NI Multisim</div>
+        </div>
+        <div class="card-img-wrap" style="background:#fff;">
+          <img src="images/curva_tueste.png" alt="Curva de Tueste" style="background:#fff;" />
+          <div class="card-img-cap red">Curva de Tueste · CESURCAFÉ</div>
+        </div>
+      </div>
+
+      <div class="card-section-title" style="color:var(--azul-tec);">Cadena de acondicionamiento — 0 a 230 °C → 0 a 5 V</div>
+      <div class="chain-diagram">
+        <div class="chain-block inp">
+          <div class="cb-label">Sensor</div>
+          <div class="cb-name">Termopar K</div>
+          <div class="cb-val">~41 µV/°C</div>
+        </div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-block amp">
+          <div class="cb-label">Etapa 1</div>
+          <div class="cb-name">AD620AN</div>
+          <div class="cb-val">G₁ ≈ 50.4×</div>
+        </div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-block filt">
+          <div class="cb-label">Etapa 2</div>
+          <div class="cb-name">Sallen-Key</div>
+          <div class="cb-val">fc ≈ 1.59 Hz</div>
+        </div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-block amp">
+          <div class="cb-label">Etapa 3</div>
+          <div class="cb-name">Amp. Salida</div>
+          <div class="cb-val">G₂ ≈ 9.82×</div>
+        </div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-block out">
+          <div class="cb-label">Salida</div>
+          <div class="cb-name">0 – 5 V</div>
+          <div class="cb-val">0 – 230 °C</div>
+        </div>
+      </div>
+
+      <div class="aprendizaje-box">
+        <strong>Pivote basado en datos, no en suposición:</strong> Las pruebas mostraron que el operador necesita una alarma que active justo en el punto de primer crack. La decisión de diseñar un comparador de ventana surgió directamente de la validación experimental — esto es Lean Startup aplicado a ingeniería.
+      </div>
+
+      <div class="evolucion-box">
+        <span class="ev-ico">🏭</span>
+        <span>El MVP funciona pero el protoboard es frágil. Para entregarlo al laboratorio, necesita una base física profesional → P3</span>
+        <span class="ev-arrow">→</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════ P3 ════ -->
+  <div class="proyecto-card">
+    <div class="card-header verde">
+      <div class="card-num">03</div>
+      <div class="card-header-text">
+        <div class="card-tag">Proyecto 3 · Manufactura</div>
+        <h3>Del Protoboard a la PCB<br>Industrial — EasyEDA → JLCPCB</h3>
+      </div>
+    </div>
+    <div class="lean-bar">
+      <div class="lb-step problema">⚠ Protoboard: frágil e irrepetible</div>
+      <div class="lb-step solucion" style="background:#e6f5ec;color:var(--verde-ok);">⚙ EasyEDA → JLCPCB</div>
+      <div class="lb-step validacion" style="background:#e6f5ec;color:var(--verde-ok);">✔ $1.65 · Calidad industrial</div>
+      <div class="lb-step evolucion">→ Listo para ECG profesional</div>
+    </div>
+    <div class="card-body">
+
+      <div class="problema-box" style="border-color:var(--verde-ok);background:#eef7f1;">
+        Un protoboard funciona en el laboratorio, <strong>pero no en el mundo real</strong>: conexiones inestables, ruido por contacto deficiente, imposible de reproducir y entregar a un usuario externo.
+      </div>
+
+      <div class="card-imgs">
+        <div class="card-img-wrap dark-bg">
+          <img src="images/img_9.png" alt="PCB Vista 2D EasyEDA" />
+          <div class="card-img-cap" style="background:#1a2a6c;color:#aaa;">Diseño 2D — EasyEDA</div>
+        </div>
+        <div class="card-img-wrap dark-bg">
+          <img src="images/img_10.png" alt="PCB Vista 3D" />
+          <div class="card-img-cap" style="background:#2a3a7a;color:#aaa;">Render 3D — Previsualización</div>
+        </div>
+      </div>
+
+      <div class="card-section-title" style="color:var(--verde-ok);">El salto de calidad: Protoboard vs PCB</div>
+      <div class="pcb-compare">
+        <div class="pcb-col proto">
+          <div class="pcb-col-title">🔌 Protoboard</div>
+          <div class="pcb-row"><span style="color:#aaa;margin-right:6px;">✗</span> Conexiones que se aflojan con el tiempo</div>
+          <div class="pcb-row"><span style="color:#aaa;margin-right:6px;">✗</span> Ruido por contacto intermitente</div>
+          <div class="pcb-row"><span style="color:#aaa;margin-right:6px;">✗</span> Un solo ejemplar · no escalable</div>
+          <div class="pcb-row"><span style="color:#aaa;margin-right:6px;">✗</span> Solo válido dentro del laboratorio</div>
+        </div>
+        <div class="pcb-arrow-col">→</div>
+        <div class="pcb-col pcb">
+          <div class="pcb-col-title">✅ PCB Industrial</div>
+          <div class="pcb-row"><span style="color:var(--verde-ok);margin-right:6px;">✔</span> Pistas soldadas · conexión permanente</div>
+          <div class="pcb-row"><span style="color:var(--verde-ok);margin-right:6px;">✔</span> Señal limpia y trazas definidas</div>
+          <div class="pcb-row"><span style="color:var(--verde-ok);margin-right:6px;">✔</span> 5 unidades idénticas por $1.65 c/u</div>
+          <div class="pcb-row"><span style="color:var(--verde-ok);margin-right:6px;">✔</span> Listo para uso real y entrega al cliente</div>
+        </div>
+      </div>
+
+      <div class="aprendizaje-box">
+        <strong>Fabricar PCBs ya no es exclusivo de grandes empresas.</strong> El flujo EasyEDA → JLCPCB produce calidad industrial en 2 semanas por menos de $2 USD. Cualquier estudiante con conocimientos DFM puede hacerlo — y el equipo ya sabe cómo.
+      </div>
+
+      <div class="evolucion-box">
+        <span class="ev-ico">💓</span>
+        <span>El equipo domina diseño, simulación y manufactura. Hora de un instrumento biomédico real → P4</span>
+        <span class="ev-arrow">→</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════ P4 ════ -->
+  <div class="proyecto-card">
+    <div class="card-header dorado">
+      <div class="card-num">04</div>
+      <div class="card-header-text">
+        <div class="card-tag">Proyecto 4 · Diseño ECG</div>
+        <h3>Marco de Diseño del<br>Sintetizador Analógico ECG</h3>
+      </div>
+    </div>
+    <div class="lean-bar">
+      <div class="lb-step problema" style="background:#fff3e0;color:#7A5000;">⚠ ¿ECG sin microcontrolador?</div>
+      <div class="lb-step solucion">⚙ ECG = suma de 5 subondas</div>
+      <div class="lb-step validacion" style="background:#e6f5ec;color:var(--verde-ok);">✔ 5 módulos definidos</div>
+      <div class="lb-step evolucion" style="background:var(--oro-suave);color:#7A5000;">→ Construir y validar en P5</div>
+    </div>
+    <div class="card-body">
+
+      <div class="problema-box" style="border-color:var(--oro);background:var(--oro-suave);color:#5a3d00;">
+        ¿Cómo representar la complejidad eléctrica del corazón humano usando <strong>únicamente componentes analógicos discretos</strong>, sin microcontrolador ni procesamiento digital?
+      </div>
+
+      <div class="card-section-title" style="color:#8B6000;">El modelo: el latido es una superposición</div>
+
+      <!-- LARGE LABELED ECG SVG -->
+      <div class="ecg-wrap">
+        <div class="ecg-label-bar">
+          <div class="dot"></div>
+          Trazado ECG Normal — Derivación II &nbsp;·&nbsp; FC 75 lpm &nbsp;·&nbsp; Modelo de superposición lineal de 5 subondas
+        </div>
+        <svg viewBox="0 0 780 175" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;background:#fffef8;">
+          <defs>
+            <pattern id="g-sm" width="20" height="20" patternUnits="userSpaceOnUse">
+              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#f0e0c0" stroke-width="0.4"/>
+            </pattern>
+            <pattern id="g-lg" width="100" height="100" patternUnits="userSpaceOnUse">
+              <rect width="100" height="100" fill="none" stroke="#e0c888" stroke-width="0.7"/>
+            </pattern>
+          </defs>
+          <rect width="780" height="175" fill="url(#g-sm)"/>
+          <rect width="780" height="175" fill="url(#g-lg)" opacity="0.6"/>
+          <!-- Baseline -->
+          <line x1="0" y1="112" x2="780" y2="112" stroke="#e0c080" stroke-width="0.9" stroke-dasharray="5,4"/>
+
+          <!-- ECG TRACE — 2 cycles -->
+          <!-- Cycle 1: starts at x=15 -->
+          <path d="M 15,112 L 50,112
+                   C 58,112 63,91 73,91 C 83,91 88,112 97,112
+                   L 116,112
+                   L 121,119 L 132,20 L 141,121 L 149,112
+                   L 170,112
+                   C 181,112 189,84 202,84 C 215,84 223,112 237,112
+                   L 295,112"
+                fill="none" stroke="#C8102E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Cycle 2: starts at x=295 -->
+          <path d="M 295,112 L 328,112
+                   C 336,112 341,91 351,91 C 361,91 366,112 375,112
+                   L 394,112
+                   L 399,119 L 410,20 L 419,121 L 427,112
+                   L 448,112
+                   C 459,112 467,84 480,84 C 493,84 501,112 515,112
+                   L 575,112"
+                fill="none" stroke="#C8102E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+          <!-- ── LABELS cycle 1 ── -->
+          <!-- P wave -->
+          <line x1="73" y1="83" x2="73" y2="58" stroke="#C9A535" stroke-width="1.8" stroke-dasharray="4,3"/>
+          <text x="73" y="53" text-anchor="middle" fill="#C9A535" font-size="26" font-weight="700" font-family="Georgia,serif">P</text>
+          <text x="73" y="158" text-anchor="middle" fill="#C9A535" font-size="15" font-family="sans-serif">Despol. auricular</text>
+          <text x="73" y="173" text-anchor="middle" fill="#C9A535" font-size="13" font-family="sans-serif">80–100 ms</text>
+
+          <!-- Q -->
+          <text x="121" y="136" text-anchor="middle" fill="#8B0000" font-size="22" font-weight="700" font-family="Georgia,serif">Q</text>
+
+          <!-- R peak -->
+          <line x1="132" y1="12" x2="132" y2="46" stroke="#C8102E" stroke-width="1.8" stroke-dasharray="4,3"/>
+          <text x="132" y="42" text-anchor="middle" fill="#C8102E" font-size="30" font-weight="700" font-family="Georgia,serif">R</text>
+          <text x="143" y="158" text-anchor="middle" fill="#C8102E" font-size="15" font-family="sans-serif">Despol. ventricular</text>
+
+          <!-- S -->
+          <text x="141" y="140" text-anchor="middle" fill="#8B0000" font-size="22" font-weight="700" font-family="Georgia,serif">S</text>
+
+          <!-- T wave -->
+          <line x1="202" y1="76" x2="202" y2="54" stroke="#C9A535" stroke-width="1.8" stroke-dasharray="4,3"/>
+          <text x="202" y="49" text-anchor="middle" fill="#C9A535" font-size="26" font-weight="700" font-family="Georgia,serif">T</text>
+          <text x="202" y="158" text-anchor="middle" fill="#C9A535" font-size="15" font-family="sans-serif">Repol. ventricular</text>
+          <text x="202" y="173" text-anchor="middle" fill="#C9A535" font-size="13" font-family="sans-serif">100–250 ms</text>
+
+          <!-- PR interval bracket -->
+          <line x1="97" y1="128" x2="132" y2="128" stroke="#1C3A5E" stroke-width="1.8"/>
+          <line x1="97" y1="123" x2="97" y2="133" stroke="#1C3A5E" stroke-width="1.8"/>
+          <line x1="132" y1="123" x2="132" y2="133" stroke="#1C3A5E" stroke-width="1.8"/>
+          <text x="114" y="145" text-anchor="middle" fill="#1C3A5E" font-size="14" font-weight="700" font-family="sans-serif">PR 160 ms</text>
+
+          <!-- QRS bracket -->
+          <line x1="121" y1="136" x2="149" y2="136" stroke="#8B0000" stroke-width="1.8"/>
+          <line x1="121" y1="131" x2="121" y2="141" stroke="#8B0000" stroke-width="1.8"/>
+          <line x1="149" y1="131" x2="149" y2="141" stroke="#8B0000" stroke-width="1.8"/>
+          <text x="135" y="152" text-anchor="middle" fill="#8B0000" font-size="13" font-weight="700" font-family="sans-serif">QRS 80 ms</text>
+
+          <!-- Info box -->
+          <rect x="600" y="14" width="168" height="98" rx="8" fill="rgba(255,248,225,0.95)" stroke="#C9A535" stroke-width="1.5"/>
+          <text x="612" y="36" fill="#7A5000" font-size="14" font-weight="700" font-family="sans-serif" letter-spacing="1">MÓDULOS ACTIVOS</text>
+          <line x1="608" y1="42" x2="760" y2="42" stroke="#C9A535" stroke-width="0.7"/>
+          <text x="612" y="58" fill="#555" font-size="13" font-family="sans-serif">M1 · NE555 — oscilador maestro</text>
+          <text x="612" y="73" fill="#555" font-size="13" font-family="sans-serif">M2 · RC integ. — gen. P y T</text>
+          <text x="612" y="88" fill="#555" font-size="13" font-family="sans-serif">M3 · TL074 — complejo QRS</text>
+          <text x="612" y="103" fill="#555" font-size="13" font-family="sans-serif">M4+M5 · sumador + salida</text>
+        </svg>
+      </div>
+
+      <div class="card-section-title" style="color:#8B6000;">Arquitectura de 5 módulos independientes</div>
+      <div class="modulos-flow">
+        <div class="modulo-box">
+          <div class="mb-num">M1</div>
+          <div class="mb-name">Oscilador Maestro</div>
+          <div class="mb-comp">NE555</div>
+        </div>
+        <div class="modulo-arrow">→</div>
+        <div class="modulo-box">
+          <div class="mb-num">M2</div>
+          <div class="mb-name">Gen. Ondas P &amp; T</div>
+          <div class="mb-comp">RC + Integ.</div>
+        </div>
+        <div class="modulo-arrow">→</div>
+        <div class="modulo-box">
+          <div class="mb-num">M3</div>
+          <div class="mb-name">Complejo QRS</div>
+          <div class="mb-comp">TL074ACN</div>
+        </div>
+        <div class="modulo-arrow">→</div>
+        <div class="modulo-box">
+          <div class="mb-num">M4</div>
+          <div class="mb-name">Sumador Analógico</div>
+          <div class="mb-comp">TL074ACN</div>
+        </div>
+        <div class="modulo-arrow">→</div>
+        <div class="modulo-box">
+          <div class="mb-num">M5</div>
+          <div class="mb-name">Salida &amp; Seg. ST</div>
+          <div class="mb-comp">TL071</div>
+        </div>
+      </div>
+
+      <div class="evolucion-box" style="background:linear-gradient(135deg,#7A5000,var(--oro));">
+        <span class="ev-ico">🔬</span>
+        <span style="color:rgba(255,255,255,.92);">El modelo arquitectónico está completo. En el P5 construimos, ajustamos módulo a módulo y validamos el prototipo con 3 anomalías clínicas.</span>
+        <span class="ev-arrow">→</span>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /proyectos-grid P1–P4 -->
+
+<!-- ══════════════════════ PROYECTO 5 — ANCHO COMPLETO ══════════════════════ -->
+<div style="padding:0 90px 44px;">
+  <div class="proyecto-card">
+    <div class="card-header gradient">
+      <div class="card-num" style="font-size:72px;">05</div>
+      <div class="card-header-text">
+        <div class="card-tag">Proyecto 5 · Prototipo Final</div>
+        <h3 style="font-size:42px;">Sintetizador Analógico ECG — Implementación, Validación y Anomalías Cardíacas</h3>
+      </div>
+    </div>
+    <div class="lean-bar">
+      <div class="lb-step problema">⚠ Diseño → Protoboard real</div>
+      <div class="lb-step solucion">⚙ 5 módulos integrados</div>
+      <div class="lb-step validacion">✔ Ritmo sinusal validado</div>
+      <div class="lb-step evolucion">💓 3 anomalías clínicas demostradas</div>
+    </div>
+
+    <div class="p5-body">
+
+      <!-- ═══ COLUMNA IZQUIERDA ═══ -->
+      <div class="p5-col">
+
+        <div class="card-section-title">De la arquitectura al protoboard</div>
+        <p class="card-desc">
+          El P5 materializa el modelo del P4 en protoboard. Estrategia de <strong>integración incremental por módulos</strong>: cada etapa fue construida, ajustada y verificada de forma independiente antes de conectarla al sistema. Esto simplificó el diagnóstico de errores y aseguró que cada bloque cumpliera su función antes de la integración final.
+        </p>
+
+        <!-- ECG NORMAL VALIDATION TRACE -->
+        <div class="ecg-wrap">
+          <div class="ecg-label-bar">
+            <div class="dot"></div>
+            Validación — Ritmo Sinusal Normal &nbsp;·&nbsp; FC = 75 lpm &nbsp;·&nbsp; Todos los módulos activos
+          </div>
+          <svg viewBox="0 0 720 128" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;background:#fffef8;">
+            <defs>
+              <pattern id="g5" width="20" height="20" patternUnits="userSpaceOnUse">
+                <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#f0e0c0" stroke-width="0.4"/>
+              </pattern>
+            </defs>
+            <rect width="720" height="128" fill="url(#g5)"/>
+            <line x1="0" y1="88" x2="720" y2="88" stroke="#e0c080" stroke-width="0.7" stroke-dasharray="4,4"/>
+
+            <!-- 3 cycles -->
+            <path d="M 8,88 L 36,88
+                     C 43,88 47,75 55,75 C 63,75 67,88 74,88
+                     L 89,88 L 93,94 L 101,22 L 108,96 L 115,88
+                     L 130,88 C 138,88 144,70 155,70 C 166,70 172,88 183,88
+                     L 231,88
+                     C 238,88 242,75 250,75 C 258,75 262,88 269,88
+                     L 284,88 L 288,94 L 296,22 L 303,96 L 310,88
+                     L 325,88 C 333,88 339,70 350,70 C 361,70 367,88 378,88
+                     L 426,88
+                     C 433,88 437,75 445,75 C 453,75 457,88 464,88
+                     L 479,88 L 483,94 L 491,22 L 498,96 L 505,88
+                     L 520,88 C 528,88 534,70 545,70 C 556,70 562,88 573,88
+                     L 622,88"
+                  fill="none" stroke="#0A6B3E" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+            <rect x="635" y="14" width="78" height="22" rx="4" fill="#0A6B3E"/>
+            <text x="674" y="30" fill="#fff" font-size="14" font-weight="700" text-anchor="middle" font-family="sans-serif">✔ Normal</text>
+            <text x="670" y="58" fill="#555" font-size="14" text-anchor="middle" font-family="sans-serif">PR = 160 ms</text>
+            <text x="670" y="74" fill="#555" font-size="14" text-anchor="middle" font-family="sans-serif">QRS = 80 ms</text>
+            <text x="670" y="90" fill="#555" font-size="14" text-anchor="middle" font-family="sans-serif">QT = 380 ms</text>
+          </svg>
+        </div>
+
+        <div class="card-section-title">Validación experimental vs estándar AHA</div>
+        <table class="tabla-mini">
+          <tr><th>Parámetro temporal</th><th>Rango clínico (AHA)</th><th>Valor medido</th></tr>
+          <tr><td>Intervalo PR</td><td>120 – 200 ms</td><td><span class="ok">160 ms ✔</span></td></tr>
+          <tr><td>Duración QRS</td><td>60 – 100 ms</td><td><span class="ok">80 ms ✔</span></td></tr>
+          <tr><td>Intervalo QT</td><td>350 – 450 ms</td><td><span class="ok">380 ms ✔</span></td></tr>
+        </table>
+
+        <div class="card-section-title">Validación de anomalías</div>
+        <table class="tabla-mini">
+          <tr><th>Anomalía</th><th>Parámetro modificado</th><th>Medido</th><th>Estado</th></tr>
+          <tr><td>Hipertrofia Ventricular</td><td>Amplitud onda R</td><td>1.65 mV</td><td><span class="ok">✔</span></td></tr>
+          <tr><td>Inversión de Onda T</td><td>Polaridad T</td><td>−0.18 mV</td><td><span class="ok">✔</span></td></tr>
+          <tr><td>Fibrilación Auricular</td><td>Varianza RR</td><td>±14.3%</td><td><span class="ok">✔</span></td></tr>
+        </table>
+
+      </div><!-- /p5-col left -->
+
+      <!-- ═══ COLUMNA DERECHA ═══ -->
+      <div class="p5-col">
+
+        <div class="card-section-title">Las 3 anomalías cardíacas — Comparación visual</div>
+        <p class="card-desc">Se seleccionaron 3 patologías de categorías ortogonales — amplitud, polaridad y periodicidad — para demostrar la capacidad clínica del sintetizador.</p>
+
+        <!-- 4-PANEL ANOMALY COMPARISON -->
+        <div class="anomalias-visual">
+
+          <!-- NORMAL -->
+          <div class="anomalia-card">
+            <div class="anomalia-card-header normal">✔ Ritmo Normal</div>
+            <div class="anomalia-trace">
+              <svg viewBox="0 0 270 95" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;background:#f6fffe;">
+                <defs><pattern id="gn" width="15" height="15" patternUnits="userSpaceOnUse"><path d="M 15 0 L 0 0 0 15" fill="none" stroke="#d0ece6" stroke-width="0.4"/></pattern></defs>
+                <rect width="270" height="95" fill="url(#gn)"/>
+                <line x1="0" y1="65" x2="270" y2="65" stroke="#b0d8c8" stroke-width="0.6" stroke-dasharray="3,3"/>
+                <path d="M 5,65 L 22,65 C 27,65 30,55 36,55 C 42,55 45,65 50,65 L 61,65 L 64,70 L 71,14 L 78,73 L 83,65 L 95,65 C 101,65 106,53 114,53 C 122,53 127,65 135,65 L 170,65 C 175,65 178,55 184,55 C 190,55 193,65 198,65 L 209,65 L 212,70 L 219,14 L 226,73 L 231,65 L 265,65"
+                      fill="none" stroke="#0A6B3E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <text x="10" y="90" fill="#0A6B3E" font-size="13" font-weight="700" font-family="sans-serif">Referencia</text>
+              </svg>
+            </div>
+            <div class="anomalia-desc">P·Q·R·S·T normales. FC = 75 lpm. Morfología clínica correcta.</div>
+          </div>
+
+          <!-- HIPERTROFIA -->
+          <div class="anomalia-card">
+            <div class="anomalia-card-header hypert">① Hipertrofia Ventricular</div>
+            <div class="anomalia-trace">
+              <svg viewBox="0 0 270 95" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;background:#fff5f6;">
+                <defs><pattern id="gh" width="15" height="15" patternUnits="userSpaceOnUse"><path d="M 15 0 L 0 0 0 15" fill="none" stroke="#f5d0d5" stroke-width="0.4"/></pattern></defs>
+                <rect width="270" height="95" fill="url(#gh)"/>
+                <line x1="0" y1="65" x2="270" y2="65" stroke="#e0b0b8" stroke-width="0.6" stroke-dasharray="3,3"/>
+                <!-- R spike very tall -->
+                <path d="M 5,65 L 22,65 C 27,65 30,55 36,55 C 42,55 45,65 50,65 L 61,65 L 64,70 L 71,3 L 78,73 L 83,65 L 95,65 C 101,65 106,53 114,53 C 122,53 127,65 135,65 L 170,65 C 175,65 178,55 184,55 C 190,55 193,65 198,65 L 209,65 L 212,70 L 219,3 L 226,73 L 231,65 L 265,65"
+                      fill="none" stroke="#C8102E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- Annotation -->
+                <line x1="71" y1="3" x2="95" y2="3" stroke="#C8102E" stroke-width="1.5" stroke-dasharray="3,2"/>
+                <text x="98" y="7" fill="#C8102E" font-size="12" font-weight="700" font-family="sans-serif">R &gt; 1.5 mV</text>
+                <text x="10" y="90" fill="#C8102E" font-size="13" font-weight="700" font-family="sans-serif">Amplitud ↑</text>
+              </svg>
+            </div>
+            <div class="anomalia-desc"><strong>Categoría: amplitud.</strong> Mayor masa ventricular → despolarización más intensa → onda R gigante. Ganancia M3 aumentada.</div>
+          </div>
+
+          <!-- T INVERTIDA -->
+          <div class="anomalia-card">
+            <div class="anomalia-card-header tinvert">② Onda T Invertida</div>
+            <div class="anomalia-trace">
+              <svg viewBox="0 0 270 95" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;background:#fff5f6;">
+                <defs><pattern id="gt" width="15" height="15" patternUnits="userSpaceOnUse"><path d="M 15 0 L 0 0 0 15" fill="none" stroke="#f5d0d5" stroke-width="0.4"/></pattern></defs>
+                <rect width="270" height="95" fill="url(#gt)"/>
+                <line x1="0" y1="65" x2="270" y2="65" stroke="#e0b0b8" stroke-width="0.6" stroke-dasharray="3,3"/>
+                <!-- T wave inverted (below baseline) -->
+                <path d="M 5,65 L 22,65 C 27,65 30,55 36,55 C 42,55 45,65 50,65 L 61,65 L 64,70 L 71,14 L 78,73 L 83,65 L 95,65 C 101,65 106,80 114,80 C 122,80 127,65 135,65 L 170,65 C 175,65 178,55 184,55 C 190,55 193,65 198,65 L 209,65 L 212,70 L 219,14 L 226,73 L 231,65 L 242,65 C 248,65 253,80 261,80"
+                      fill="none" stroke="#C8102E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- Annotation -->
+                <line x1="114" y1="80" x2="138" y2="80" stroke="#C8102E" stroke-width="1.5" stroke-dasharray="3,2"/>
+                <text x="141" y="84" fill="#C8102E" font-size="12" font-weight="700" font-family="sans-serif">T &lt; −0.1 mV</text>
+                <text x="10" y="90" fill="#C8102E" font-size="13" font-weight="700" font-family="sans-serif">Polaridad ↓</text>
+              </svg>
+            </div>
+            <div class="anomalia-desc"><strong>Categoría: polaridad.</strong> Isquemia subendocárdica → repolarización alterada → T negativa. Inversor unity-gain en M2.</div>
+          </div>
+
+          <!-- FIBRILACIÓN -->
+          <div class="anomalia-card">
+            <div class="anomalia-card-header fibril">③ Fibrilación Auricular</div>
+            <div class="anomalia-trace">
+              <svg viewBox="0 0 270 95" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;background:#fffef5;">
+                <defs><pattern id="gf" width="15" height="15" patternUnits="userSpaceOnUse"><path d="M 15 0 L 0 0 0 15" fill="none" stroke="#ece8c0" stroke-width="0.4"/></pattern></defs>
+                <rect width="270" height="95" fill="url(#gf)"/>
+                <line x1="0" y1="65" x2="270" y2="65" stroke="#e0d080" stroke-width="0.6" stroke-dasharray="3,3"/>
+                <!-- f-waves (chaotic atrial waves) + irregular QRS, no T wave -->
+                <path d="M 5,65 C 8,62 11,68 14,65 C 17,62 20,68 23,65 C 26,62 29,68 32,65 C 35,62 38,68 41,65 C 44,62 47,68 50,65
+                         L 54,70 L 61,14 L 68,73 L 73,65
+                         C 77,62 80,68 83,65 C 86,62 89,68 92,65 C 95,62 98,68 101,65 C 104,62 107,68 110,65
+                         L 114,70 L 121,14 L 128,73 L 133,65
+                         C 136,62 139,68 142,65 C 145,62 148,68 151,65 C 154,62 157,68 160,65 C 163,62 166,68 169,65 C 172,62 175,68 178,65 C 181,62 184,68 187,65
+                         L 191,70 L 198,14 L 205,73 L 210,65
+                         C 213,62 216,68 219,65 C 222,62 225,68 228,65 L 265,65"
+                      fill="none" stroke="#C9A535" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- Irregular RR annotation -->
+                <line x1="61" y1="6" x2="121" y2="6" stroke="#aaa" stroke-width="1.2"/>
+                <line x1="61" y1="3" x2="61" y2="9" stroke="#aaa" stroke-width="1.2"/>
+                <line x1="121" y1="3" x2="121" y2="9" stroke="#aaa" stroke-width="1.2"/>
+                <text x="91" y="18" fill="#888" font-size="11" text-anchor="middle" font-family="sans-serif">RR₁</text>
+                <line x1="121" y1="6" x2="198" y2="6" stroke="#aaa" stroke-width="1.2"/>
+                <line x1="198" y1="3" x2="198" y2="9" stroke="#aaa" stroke-width="1.2"/>
+                <text x="159" y="18" fill="#888" font-size="11" text-anchor="middle" font-family="sans-serif">RR₂ ≠ RR₁</text>
+                <!-- No P label -->
+                <text x="135" y="90" fill="#C9A535" font-size="13" font-weight="700" font-family="sans-serif">Sin onda P</text>
+              </svg>
+            </div>
+            <div class="anomalia-desc"><strong>Categoría: periodicidad.</strong> Aurículas caóticas (350–600 Hz) → no hay onda P, solo ondas f. Intervalos RR irregulares ±14.3%.</div>
+          </div>
+
+        </div><!-- /anomalias-visual -->
+
+        <div class="aprendizaje-box" style="margin-top:6px;">
+          <strong>La señal cardíaca, aparentemente compleja, se sintetiza íntegramente con electrónica analógica discreta estándar y sin microcontrolador.</strong> Amplificación, filtrado, integración y suma ponderada — todas las técnicas aprendidas durante el curso — convergen en un único instrumento biomédico funcional y validado.
+        </div>
+
+      </div><!-- /p5-col right -->
+    </div><!-- /p5-body -->
+  </div>
+</div><!-- /p5 wrapper -->
+
+<!-- ══════════════════════ FOOTER ══════════════════════ -->
+<div class="footer">
+  <div class="referencias">
+    <h4>Referencias</h4>
+    <ol>
+      <li>Sedra, A. S., &amp; Smith, K. C. (2020). <em>Microelectronic Circuits</em> (8th ed.). Oxford University Press. Cap. 8–11.</li>
+      <li>Ries, E. (2011). <em>The Lean Startup</em>. Crown Business. Metodología Crear-Medir-Aprender aplicada a MVPs de ingeniería.</li>
+      <li>Horowitz, P., &amp; Hill, W. (2015). <em>The Art of Electronics</em> (3rd ed.). Cambridge University Press. Cap. 7.</li>
+      <li>Tompkins, W. J. (1993). <em>Biomedical Digital Signal Processing</em>. Prentice Hall. Morfología de la señal ECG y criterios diagnósticos.</li>
+      <li>Texas Instruments. (2020). <em>TL07x Low-Noise JFET-Input Operational Amplifiers</em>. Datasheet SLOS081K.</li>
+      <li>Analog Devices. (2017). <em>AD620 Low Cost, Low Power Instrumentation Amplifier</em>. Datasheet AD620A/AD620B.</li>
+      <li>American Heart Association. (2021). Recommendations for ECG Standardization. <em>Circulation</em>, 143(5), e154–e161.</li>
+      <li>JLCPCB. (2024). <em>PCB Manufacturing Capabilities &amp; Design Rules</em>. jlcpcb.com/capabilities.</li>
+    </ol>
+  </div>
+
+  <div style="display:flex;gap:28px;align-items:flex-start;">
+    <div class="qr-block">
+      <div class="qr-label" style="font-size:16px;letter-spacing:2px;">Emerson F. Barrera</div>
+      <div class="qr-box">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=155x155&data=https://portafolio-emerson"
+             style="width:155px;height:155px;border-radius:6px;" alt="QR Emerson" />
+      </div>
+      <div class="qr-sub">Portafolio<br>20241221637</div>
+    </div>
+    <div class="qr-block">
+      <div class="qr-label" style="font-size:16px;letter-spacing:2px;">Dominy M. Cadena</div>
+      <div class="qr-box">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=155x155&data=https://portafolio-dominy"
+             style="width:155px;height:155px;border-radius:6px;" alt="QR Dominy" />
+      </div>
+      <div class="qr-sub">Portafolio<br>20241221638</div>
+    </div>
+    <div class="qr-block">
+      <div class="qr-label" style="font-size:16px;letter-spacing:2px;">Daniel S. Olarte</div>
+      <div class="qr-box">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=155x155&data=https://portafolio-daniel"
+             style="width:155px;height:155px;border-radius:6px;" alt="QR Daniel" />
+      </div>
+      <div class="qr-sub">Portafolio<br>20241221589</div>
+    </div>
+    <div class="qr-block">
+      <div class="qr-label" style="font-size:16px;letter-spacing:2px;">Jerónimo Pérez</div>
+      <div class="qr-box">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=155x155&data=https://portafolio-jeronimo"
+             style="width:155px;height:155px;border-radius:6px;" alt="QR Jerónimo" />
+      </div>
+      <div class="qr-sub">Portafolio<br>20241221419</div>
+    </div>
+  </div>
+
+  <div class="footer-right">
+    <div class="fr-logo">🎓</div>
+    <div class="fr-title">Electrónica Analógica III</div>
+    <div class="fr-sub">
+      Universidad Surcolombiana<br>
+      Facultad de Ingeniería<br>
+      Programa de Ingeniería Electrónica<br>
+      Neiva, Huila — Colombia
+    </div>
+    <div class="fr-year">2026</div>
+  </div>
+</div>
+
+</div><!-- /poster -->
+</body>
+</html>
