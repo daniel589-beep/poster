@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Póster Integrador – Electrónica Analógica III</title>
+<!--
+  ═══════════════════════════════════════════════════════════════════
+  CAMBIOS PRINCIPALES APLICADOS:
+  1. Eliminada banda de fotos del equipo (ocupaba espacio sin valor técnico).
+  2. Reemplazado "journey strip" decorativo por una sección de
+     Metodología + Arquitectura de sistema con diagrama funcional SVG.
+  3. Layout reorganizado en 3 columnas para mejor flujo de lectura.
+  4. Agregado diagrama de bloques del sistema completo (SVG inline).
+  5. Agregado tabla de integración de herramientas entre proyectos.
+  6. Esquemas eléctricos simplificados en P1 y P5 (SVG).
+  7. Flujo de cadena de señal con valores técnicos verificables.
+  8. Tabla de métricas comparativas validadas AHA en P5.
+  9. Narrativa secuencial explícita: cada proyecto tiene un "Aporta al
+     sistema" que lo conecta con el siguiente.
+  10. Jerarquía visual mejorada: 3 niveles (título sección, subtítulo,
+      cuerpo) con tamaños diferenciados.
+  11. Reducidos elementos decorativos (badges, íconos emoji, gradientes
+      múltiples). Fondo neutro, sin saturación visual.
+  12. Conclusión refactorizada en tabla Crear-Medir-Aprender por proyecto.
+  ═══════════════════════════════════════════════════════════════════
+-->
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Serif:wght@700;900&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   TOKENS DE DISEÑO
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+  --rojo:       #C8102E;
+  --rojo-osc:   #8B0000;
+  --rojo-pale:  #FDF2F4;
+  --azul:       #1C3A5E;
+  --azul-pale:  #EEF3F9;
+  --verde:      #0A6B3E;
+  --verde-pale: #EBF5F0;
+  --oro:        #B8860B;
+  --oro-pale:   #FDF8EC;
+  --gris-1:     #F4F4F6;
+  --gris-2:     #E2E2E6;
+  --gris-3:     #ABABAB;
+  --gris-4:     #6B6B6B;
+  --negro:      #111111;
+  --blanco:     #FFFFFF;
+  /* Tipografía */
+  --f-display:  'IBM Plex Serif', serif;
+  --f-body:     'IBM Plex Sans', sans-serif;
+  --f-mono:     'IBM Plex Mono', monospace;
+}
+
+*  { margin:0; padding:0; box-sizing:border-box; }
+body { width:2362px; background:#b0b0b0; font-family:var(--f-body); color:var(--negro); }
+
+/* TAMAÑO FÍSICO: 80 cm ancho x 160 cm alto
+   A 96 dpi: 80cm = 2362px, 160cm = 4724px */
+
+
+.poster { width:2362px; min-height:4724px; background:var(--blanco); display:flex; flex-direction:column; }
+
+/* ═══ UTILIDADES ═══ */
+.tag { font-size:13px; font-weight:700; letter-spacing:3px; text-transform:uppercase; }
+.mono { font-family:var(--f-mono); }
+.ok   { color:var(--verde); font-weight:700; }
+.ng   { color:var(--rojo);  font-weight:700; }
+
+/* ═══════════════════════════════════════════════════════════════
+   HEADER — Negro + franja roja superior
+   ═══════════════════════════════════════════════════════════════ */
+.header {
+  background:var(--negro);
+  border-top:8px solid var(--rojo);
+}
+.header-inner {
+  padding:44px 80px 40px;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:52px;
+  align-items:center;
+}
+.logo-wrap {
+  width:130px; height:130px; border-radius:50%;
+  background:var(--blanco); border:3px solid rgba(255,255,255,.25);
+  overflow:hidden; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.logo-wrap img { width:120px; height:120px; object-fit:contain; border-radius:50%; }
+
+.h-center {}
+.h-eyebrow {
+  font-family:var(--f-mono); font-size:15px; font-weight:600;
+  letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,.45);
+  margin-bottom:10px;
+}
+.h-title {
+  font-family:var(--f-display); font-size:62px; font-weight:900;
+  color:var(--blanco); line-height:1.05; letter-spacing:-1px; margin-bottom:14px;
+}
+.h-title em { font-style:italic; color:#E8A020; }
+.h-meta { display:flex; gap:28px; flex-wrap:wrap; }
+.h-meta span {
+  font-size:19px; font-weight:400; color:rgba(255,255,255,.5);
+  display:flex; align-items:center; gap:8px;
+}
+.h-meta span + span::before { content:'·'; color:var(--rojo); font-size:22px; line-height:1; }
+
+.h-right { text-align:right; }
+.h-label {
+  font-family:var(--f-mono); font-size:12px; font-weight:600;
+  letter-spacing:3px; text-transform:uppercase; color:var(--rojo);
+  margin-bottom:10px;
+}
+.h-autor { color:var(--blanco); font-size:19px; font-weight:600; line-height:1.5; }
+.h-autor span { font-family:var(--f-mono); font-size:14px; color:rgba(255,255,255,.35); margin-left:10px; }
+.h-docente-wrap {
+  margin-top:16px; padding:10px 16px;
+  border:1px solid rgba(255,255,255,.12); border-radius:6px;
+  background:rgba(255,255,255,.04);
+}
+.h-docente-lbl { font-family:var(--f-mono); font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--rojo); margin-bottom:4px; }
+.h-docente-name { color:var(--blanco); font-size:18px; font-weight:600; }
+
+/* ═══════════════════════════════════════════════════════════════
+   BANDA DE CONTEXTO — Problema + Metodología (reemplaza fotos)
+   ═══════════════════════════════════════════════════════════════ */
+.contexto-band {
+  background:var(--gris-1);
+  border-bottom:3px solid var(--gris-2);
+  padding:36px 80px;
+  display:grid;
+  grid-template-columns:1fr 1px 1fr 1px 1fr;
+  gap:0;
+}
+.ctx-divider { background:var(--gris-2); }
+.ctx-bloque { padding:0 44px; }
+.ctx-bloque:first-child { padding-left:0; }
+.ctx-bloque:last-child  { padding-right:0; }
+.ctx-label {
+  font-family:var(--f-mono); font-size:13px; font-weight:600;
+  letter-spacing:3px; text-transform:uppercase; color:var(--rojo);
+  border-bottom:2px solid var(--rojo); padding-bottom:6px; margin-bottom:12px;
+  display:inline-block;
+}
+.ctx-title {
+  font-family:var(--f-display); font-size:26px; font-weight:700;
+  color:var(--negro); line-height:1.25; margin-bottom:8px;
+}
+.ctx-desc { font-size:19px; color:var(--gris-4); line-height:1.6; }
+.ctx-desc strong { color:var(--negro); font-weight:700; }
+
+/* Lean steps */
+.lean-steps { display:flex; flex-direction:column; gap:6px; margin-top:4px; }
+.lean-step {
+  display:flex; align-items:center; gap:12px;
+  padding:8px 12px; border-radius:6px; background:var(--blanco);
+  border-left:4px solid transparent;
+}
+.lean-step.crear { border-color:var(--azul); }
+.lean-step.medir { border-color:var(--rojo); }
+.lean-step.aprender { border-color:var(--verde); }
+.ls-num { font-family:var(--f-mono); font-size:12px; font-weight:700; letter-spacing:1px; width:88px; flex-shrink:0; }
+.lean-step.crear    .ls-num { color:var(--azul); }
+.lean-step.medir    .ls-num { color:var(--rojo); }
+.lean-step.aprender .ls-num { color:var(--verde); }
+.ls-text { font-size:17px; font-weight:600; color:var(--negro); }
+
+/* ═══════════════════════════════════════════════════════════════
+   DIAGRAMA FUNCIONAL DEL SISTEMA — Sección nueva
+   ═══════════════════════════════════════════════════════════════ */
+.sistema-section {
+  padding:36px 80px 0;
+  background:var(--blanco);
+}
+.seccion-cabecera {
+  display:flex; align-items:baseline; gap:20px; margin-bottom:6px;
+}
+.seccion-num {
+  font-family:var(--f-mono); font-size:13px; font-weight:700;
+  letter-spacing:3px; text-transform:uppercase; color:var(--gris-3);
+  display:none;
+}
+.seccion-titulo {
+  font-family:var(--f-display); font-size:36px; font-weight:700;
+  color:var(--negro); letter-spacing:-.3px;
+}
+.seccion-titulo span { color:var(--rojo); }
+.seccion-sub { font-size:19px; color:var(--gris-4); margin-bottom:24px; }
+.sep-h { height:3px; background:var(--gris-2); margin-bottom:28px; }
+
+/* ═══════════════════════════════════════════════════════════════
+   DIAGRAMA SVG — estilos de texto inline reemplazados
+   ═══════════════════════════════════════════════════════════════ */
+
+
+/* ═══ ECG DIAGRAM PROMINENCE ═══ */
+.ecg-diagram-feature {
+  border-radius:10px; overflow:hidden;
+  border:3px solid var(--oro);
+  box-shadow:0 6px 28px rgba(184,134,11,0.22);
+  margin-bottom:12px;
+  position:relative;
+}
+.ecg-diagram-feature::before {
+  content:'ESQUEMA TÉCNICO';
+  position:absolute; top:10px; right:12px;
+  font-family:var(--f-mono); font-size:10px; font-weight:700;
+  letter-spacing:3px; color:var(--oro);
+  background:rgba(255,255,255,0.92); padding:3px 8px; border-radius:4px;
+  z-index:2;
+}
+.ecg-diagram-feature img { width:100%; height:auto; display:block; }
+.ecg-diagram-caption {
+  padding:9px 16px; background:#FDF8EC;
+  font-family:var(--f-mono); font-size:12px; color:#5a3d00;
+  border-top:2px solid var(--oro); line-height:1.5;
+}
+
+/* ═══ CARD LABELS: bloque-lbl with icon prefix ═══ */
+.bloque-lbl-icon { display:flex; align-items:center; gap:8px; }
+
+/* ═══════════════════════════════════════════════════════════════
+   NARRATIVA 3 COLUMNAS — Sección de proyectos
+   ═══════════════════════════════════════════════════════════════ */
+.narrativa-section { padding:32px 80px 0; }
+
+/* Timeline vertical lateral */
+.narrativa-grid {
+  display:grid;
+  grid-template-columns:56px 1fr 1fr 1fr;
+  gap:0 28px;
+}
+
+/* Eje de tiempo */
+.timeline-col { display:flex; flex-direction:column; align-items:center; padding-top:10px; }
+.tl-node {
+  width:44px; height:44px; border-radius:50%;
+  background:var(--rojo); color:var(--blanco);
+  font-family:var(--f-mono); font-size:16px; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; position:relative; z-index:2;
+}
+.tl-node.gold { background:var(--oro); }
+.tl-line { flex:1; width:3px; background:var(--gris-2); margin:6px 0; }
+
+/* Cards de proyecto */
+.pcard {
+  background:var(--blanco);
+  border:1.5px solid var(--gris-2);
+  border-radius:12px;
+  overflow:hidden;
+  margin-bottom:28px;
+  display:flex;
+  flex-direction:column;
+}
+.pcard-head {
+  padding:22px 28px;
+  display:flex; align-items:flex-start; gap:18px;
+  border-bottom:1px solid var(--gris-2);
+}
+.pcard-head.rojo { background:var(--rojo); border-color:var(--rojo-osc); }
+.pcard-head.azul { background:var(--azul); }
+.pcard-head.verde { background:var(--verde); }
+.pcard-head.oro   { background:linear-gradient(135deg,#6B4C00,var(--oro)); }
+.pcard-num {
+  font-family:var(--f-display); font-size:52px; font-weight:900;
+  color:rgba(255,255,255,.18); line-height:1; flex-shrink:0;
+}
+.pcard-head-text { flex:1; }
+.pcard-etiqueta {
+  font-family:var(--f-mono); font-size:13px; font-weight:600;
+  letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,.55);
+  margin-bottom:4px;
+}
+.pcard-head h3 {
+  font-family:var(--f-display); font-size:26px; font-weight:700;
+  color:var(--blanco); line-height:1.2;
+}
+
+.pcard-body { padding:22px 28px; display:flex; flex-direction:column; gap:16px; flex:1; }
+
+/* Sub-bloques dentro de la card */
+.bloque-lbl {
+  font-family:var(--f-mono); font-size:12px; font-weight:700;
+  letter-spacing:3px; text-transform:uppercase; color:var(--rojo);
+  border-bottom:1.5px solid var(--gris-2); padding-bottom:5px; margin-bottom:6px;
+}
+.bloque-lbl.azul   { color:var(--azul); }
+.bloque-lbl.verde  { color:var(--verde); }
+.bloque-lbl.oro    { color:var(--oro); }
+
+.caja-obj {
+  background:var(--gris-1); border-left:4px solid var(--gris-3);
+  border-radius:0 8px 8px 0; padding:12px 18px;
+  font-size:18px; color:var(--negro); line-height:1.55;
+}
+.caja-barr {
+  background:var(--azul-pale); border-left:4px solid var(--azul);
+  border-radius:0 8px 8px 0; padding:12px 18px;
+  font-size:17px; color:var(--azul); line-height:1.55;
+}
+.caja-barr strong { color:#0e2236; }
+.caja-aprend {
+  background:var(--oro-pale); border-left:4px solid var(--oro);
+  border-radius:0 8px 8px 0; padding:12px 18px;
+  font-size:17px; color:#5a3d00; line-height:1.55;
+}
+.caja-aprend strong { color:#6B4C00; }
+.caja-sistema {
+  background:var(--verde-pale); border-left:4px solid var(--verde);
+  border-radius:0 8px 8px 0; padding:10px 16px;
+  font-size:16px; color:#0A4A2A; line-height:1.5;
+  display:flex; gap:10px; align-items:flex-start;
+}
+.caja-sistema .cs-icon { font-size:20px; flex-shrink:0; margin-top:1px; }
+
+.card-desc { font-size:17px; color:var(--gris-4); line-height:1.6; }
+.card-desc strong { color:var(--negro); }
+
+/* Tablas compactas */
+.tabla { width:100%; border-collapse:collapse; font-size:16px; }
+.tabla th { background:var(--negro); color:var(--blanco); padding:7px 12px; text-align:left; font-weight:700; font-size:14px; font-family:var(--f-mono); letter-spacing:1px; }
+.tabla td { padding:7px 12px; border-bottom:1px solid var(--gris-2); color:var(--gris-4); font-size:16px; }
+.tabla tr:last-child td { border-bottom:none; }
+.tabla tr:nth-child(even) td { background:var(--gris-1); }
+
+/* Cadena de señal */
+.chain {
+  display:flex; align-items:stretch; gap:0;
+  background:var(--gris-1); border-radius:8px; overflow:hidden;
+  border:1.5px solid var(--gris-2);
+}
+.chain-blk {
+  flex:1; padding:12px 10px; text-align:center;
+  border-right:1.5px solid var(--gris-2); background:var(--blanco);
+  display:flex; flex-direction:column; gap:3px;
+}
+.chain-blk:last-child { border-right:none; }
+.cb-lbl  { font-family:var(--f-mono); font-size:11px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--gris-3); }
+.cb-name { font-size:16px; font-weight:700; color:var(--negro); line-height:1.2; }
+.cb-val  { font-family:var(--f-mono); font-size:13px; font-weight:600; }
+.chain-blk.inp   { border-top:3px solid var(--azul); }  .chain-blk.inp  .cb-val { color:var(--azul); }
+.chain-blk.amp   { border-top:3px solid var(--rojo); }  .chain-blk.amp  .cb-val { color:var(--rojo); }
+.chain-blk.filt  { border-top:3px solid var(--verde); } .chain-blk.filt .cb-val { color:var(--verde); }
+.chain-blk.out   { border-top:3px solid var(--oro); }   .chain-blk.out  .cb-val { color:var(--oro); }
+.chain-arrow { display:flex; align-items:center; padding:0 6px; color:var(--gris-3); font-size:18px; font-weight:700; background:var(--gris-1); flex-shrink:0; }
+
+/* Modulos flow */
+.mod-flow { display:flex; align-items:stretch; border-radius:8px; overflow:hidden; border:1.5px solid var(--gris-2); }
+.mod-blk  { flex:1; padding:10px 8px; text-align:center; background:var(--blanco); border-right:1.5px solid var(--gris-2); display:flex; flex-direction:column; gap:3px; }
+.mod-blk:last-child { border-right:none; }
+.mod-num  { font-family:var(--f-mono); font-size:12px; font-weight:700; color:var(--rojo); letter-spacing:1px; }
+.mod-name { font-size:15px; font-weight:700; color:var(--negro); line-height:1.2; }
+.mod-comp { font-family:var(--f-mono); font-size:12px; color:var(--gris-3); }
+.mod-arrow{ display:flex; align-items:center; padding:0 4px; background:var(--gris-1); color:var(--gris-3); font-size:14px; flex-shrink:0; }
+
+/* PCB compare */
+.pcb-cmp { display:grid; grid-template-columns:1fr 36px 1fr; gap:0; align-items:center; border:1.5px solid var(--gris-2); border-radius:8px; overflow:hidden; }
+.pcb-col { padding:14px 16px; }
+.pcb-col.antes  { background:var(--gris-1); }
+.pcb-col.despues{ background:var(--verde-pale); }
+.pcb-title { font-size:16px; font-weight:700; margin-bottom:8px; }
+.pcb-col.antes .pcb-title { color:var(--gris-3); }
+.pcb-col.despues .pcb-title { color:var(--verde); }
+.pcb-row { font-size:15px; color:var(--gris-4); padding:4px 0; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--gris-2); }
+.pcb-row:last-child { border-bottom:none; }
+.pcb-arrow { background:var(--gris-2); height:100%; display:flex; align-items:center; justify-content:center; font-size:22px; color:var(--rojo); font-weight:700; }
+
+/* Cinco circuitos */
+.cinco-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; }
+.circ-card {
+  background:var(--gris-1); border-radius:8px; padding:12px 8px;
+  border-top:3px solid var(--rojo); text-align:center;
+  display:flex; flex-direction:column; gap:4px;
+}
+.circ-name { font-family:var(--f-mono); font-size:17px; font-weight:700; color:var(--negro); }
+.circ-sub  { font-size:13px; color:var(--gris-4); line-height:1.3; }
+
+/* Imagen placeholder */
+.ph-wrap { border-radius:8px; overflow:hidden; border:1.5px solid var(--gris-2); display:flex; flex-direction:column; }
+.ph-wrap img { width:100%; object-fit:cover; display:block; }
+.ph-cap { text-align:center; font-size:13px; font-weight:600; color:var(--gris-4); padding:6px 10px; background:var(--gris-1); border-top:1px solid var(--gris-2); }
+.ph-cap.verde { background:var(--verde); color:#fff; }
+
+.img-ph {
+  background:var(--gris-1); border:2px dashed var(--gris-2); border-radius:8px;
+  min-height:180px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:6px; text-align:center; padding:20px;
+}
+.ph-icon { font-size:28px; opacity:.25; }
+.ph-title { font-size:16px; font-weight:700; color:var(--gris-3); line-height:1.3; }
+.ph-path  { font-family:var(--f-mono); font-size:11px; color:var(--gris-3); background:var(--gris-2); padding:3px 8px; border-radius:4px; }
+
+.ph-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+
+/* Anomalías P5 */
+.anom-card { background:var(--blanco); border-radius:8px; border:1.5px solid var(--gris-2); overflow:hidden; }
+.anom-head { padding:10px 14px; font-size:17px; font-weight:700; border-bottom:1.5px solid var(--gris-2); display:flex; align-items:center; gap:8px; }
+.anom-head.normal  { background:var(--verde-pale); color:var(--verde); }
+.anom-head.hypert  { background:var(--rojo-pale);  color:var(--rojo-osc); }
+.anom-head.tinvert { background:var(--rojo-pale);  color:var(--rojo-osc); }
+.anom-head.fibril  { background:var(--oro-pale);   color:#6B4C00; }
+.anom-desc { padding:10px 14px; font-size:15px; color:var(--gris-4); line-height:1.45; }
+.anom-desc strong { color:var(--negro); }
+
+/* ═══════════════════════════════════════════════════════════════
+   SECCIÓN ARQUITECTURA DEL SISTEMA COMPLETO
+   ═══════════════════════════════════════════════════════════════ */
+.arq-section { padding:0 80px 36px; }
+
+/* ═══════════════════════════════════════════════════════════════
+   P5 — Proyecto final: ancho completo
+   ═══════════════════════════════════════════════════════════════ */
+.p5-section { padding:0 80px 36px; }
+.p5-card {
+  background:var(--blanco); border:1.5px solid var(--gris-2);
+  border-radius:12px; overflow:hidden;
+}
+.p5-head {
+  background:var(--rojo-osc); padding:22px 32px;
+  display:flex; align-items:center; gap:24px;
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
+.p5-num {
+  font-family:var(--f-display); font-size:64px; font-weight:900;
+  color:rgba(255,255,255,.2); line-height:1; flex-shrink:0;
+}
+.p5-head-text .p5-etiq {
+  font-family:var(--f-mono); font-size:13px; font-weight:600;
+  letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,.45);
+  margin-bottom:4px;
+}
+.p5-head-text h3 {
+  font-family:var(--f-display); font-size:36px; font-weight:700;
+  color:var(--blanco); line-height:1.2;
+}
+.p5-body { display:grid; grid-template-columns:1fr 1fr; gap:36px; padding:28px 32px; }
+.p5-col  { display:flex; flex-direction:column; gap:18px; }
+
+/* ═══════════════════════════════════════════════════════════════
+   TABLA INTEGRACIÓN — Resumen de 5 proyectos
+   ═══════════════════════════════════════════════════════════════ */
+.integ-section { padding:0 80px 36px; }
+
+/* ═══════════════════════════════════════════════════════════════
+   FOTOS DE INTEGRANTES — en el footer
+   ═══════════════════════════════════════════════════════════════ */
+.integrante-foto {
+  width:110px; height:110px; border-radius:50%;
+  overflow:hidden; border:3px solid var(--rojo);
+  background:var(--gris-1);
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.integrante-foto img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+.integrante-ph {
+  width:100%; height:100%; border-radius:50%;
+  background:var(--gris-1);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:4px;
+}
+.integrante-ph span { font-size:28px; opacity:.3; }
+.integrante-ph small { font-family:var(--f-mono); font-size:10px; color:var(--gris-3); letter-spacing:1px; text-align:center; padding:0 6px; line-height:1.3; }
+
+/* ═══════════════════════════════════════════════════════════════
+   CONCLUSIONES
+   ═══════════════════════════════════════════════════════════════ */
+.conclusiones-section {
+  padding:36px 80px 40px;
+  background:var(--negro);
+  border-top:4px solid var(--rojo);
+}
+.conclusiones-header {
+  display:flex; align-items:baseline; gap:20px; margin-bottom:6px;
+}
+.conclusiones-header .seccion-num { color:var(--gris-3); }
+.conclusiones-header .seccion-titulo { color:var(--blanco); }
+.conclusiones-header .seccion-titulo span { color:var(--rojo); }
+.conclusiones-sub {
+  font-size:19px; color:rgba(255,255,255,.4); margin-bottom:24px;
+}
+.conclusiones-sep { height:2px; background:rgba(255,255,255,.1); margin-bottom:32px; }
+
+/* Grid de conclusiones por proyecto */
+.concl-grid {
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:16px;
+  margin-bottom:32px;
+}
+.concl-card {
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:10px;
+  overflow:hidden;
+  display:flex; flex-direction:column;
+}
+.concl-card-head {
+  padding:14px 18px;
+  display:flex; align-items:center; gap:12px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.concl-card-head.rojo  { border-top:3px solid var(--rojo); }
+.concl-card-head.azul  { border-top:3px solid #4A90D9; }
+.concl-card-head.verde { border-top:3px solid var(--verde); }
+.concl-card-head.oro   { border-top:3px solid var(--oro); }
+.concl-card-head.rojo-osc { border-top:3px solid #FF6B6B; }
+.concl-pnum {
+  font-family:var(--f-display); font-size:32px; font-weight:900;
+  color:rgba(255,255,255,.15); line-height:1; flex-shrink:0;
+}
+.concl-ptag {
+  font-family:var(--f-mono); font-size:11px; font-weight:700;
+  letter-spacing:2px; text-transform:uppercase;
+  margin-bottom:3px;
+}
+.concl-card-head.rojo     .concl-ptag { color:var(--rojo); }
+.concl-card-head.azul     .concl-ptag { color:#4A90D9; }
+.concl-card-head.verde    .concl-ptag { color:#2ECC71; }
+.concl-card-head.oro      .concl-ptag { color:var(--oro); }
+.concl-card-head.rojo-osc .concl-ptag { color:#FF6B6B; }
+.concl-ptitle {
+  font-size:15px; font-weight:700; color:var(--blanco); line-height:1.25;
+}
+.concl-card-body {
+  padding:14px 18px; flex:1; display:flex; flex-direction:column; gap:10px;
+}
+.concl-item {
+  display:flex; gap:10px; align-items:flex-start;
+  font-size:15px; color:rgba(255,255,255,.6); line-height:1.5;
+}
+.concl-item::before {
+  content:'→'; flex-shrink:0; font-family:var(--f-mono);
+  font-weight:700; font-size:13px; margin-top:2px;
+}
+.concl-item.rojo::before     { color:var(--rojo); }
+.concl-item.azul::before     { color:#4A90D9; }
+.concl-item.verde::before    { color:#2ECC71; }
+.concl-item.oro::before      { color:var(--oro); }
+.concl-item.rojo-osc::before { color:#FF6B6B; }
+.concl-item strong { color:var(--blanco); }
+
+/* Bloque conclusión general */
+.concl-general {
+  background:rgba(200,16,46,.08);
+  border:1.5px solid rgba(200,16,46,.3);
+  border-radius:12px;
+  padding:28px 36px;
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:32px;
+  align-items:center;
+}
+.concl-gen-icon {
+  font-family:var(--f-display); font-size:80px; font-weight:900;
+  color:rgba(200,16,46,.2); line-height:1; flex-shrink:0;
+  letter-spacing:-3px;
+}
+.concl-gen-content {}
+.concl-gen-label {
+  font-family:var(--f-mono); font-size:13px; font-weight:700;
+  letter-spacing:3px; text-transform:uppercase; color:var(--rojo);
+  margin-bottom:10px;
+}
+.concl-gen-text {
+  font-family:var(--f-display); font-size:26px; font-weight:700;
+  color:var(--blanco); line-height:1.35; margin-bottom:14px;
+}
+.concl-gen-text em { font-style:italic; color:#E8A020; }
+.concl-gen-sub {
+  font-size:18px; color:rgba(255,255,255,.5); line-height:1.6;
+}
+.concl-gen-sub strong { color:rgba(255,255,255,.85); }
+
+/* ═══════════════════════════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════════════════════════ */
+.footer {
+  background:#111; padding:40px 80px 36px;
+  display:grid; grid-template-columns:1fr auto auto;
+  gap:60px; align-items:start;
+  border-top:4px solid var(--rojo);
+}
+.referencias h4 { color:var(--oro); font-size:15px; font-weight:700; letter-spacing:2px; text-transform:uppercase; margin-bottom:14px; font-family:var(--f-mono); }
+.referencias ol  { padding-left:20px; }
+.referencias ol li { color:rgba(255,255,255,.5); font-size:15px; line-height:1.6; margin-bottom:6px; }
+.qr-area { display:flex; gap:36px; align-items:flex-start; }
+.qr-block { display:flex; flex-direction:column; align-items:center; gap:8px; }
+/* Foto circular encima del QR */
+.qr-foto {
+  width:110px; height:110px; border-radius:50%;
+  overflow:hidden; border:3px solid var(--rojo);
+  background:var(--gris-1);
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.qr-foto img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+.qr-foto-ph {
+  width:100%; height:100%;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+}
+.qr-foto-ph span { font-size:30px; opacity:.22; }
+.qr-foto-ph small { font-family:var(--f-mono); font-size:9px; color:var(--gris-3); letter-spacing:1px; text-align:center; padding:0 6px; line-height:1.4; text-transform:uppercase; }
+.qr-lbl { color:var(--oro); font-size:13px; font-weight:700; letter-spacing:2px; text-transform:uppercase; font-family:var(--f-mono); text-align:center; }
+.qr-box { width:130px; height:130px; border-radius:8px; overflow:hidden; background:var(--blanco); }
+.qr-box img { width:130px; height:130px; border-radius:8px; }
+.qr-sub { color:rgba(255,255,255,.3); font-size:12px; text-align:center; font-family:var(--f-mono); }
+.footer-right { display:flex; flex-direction:column; align-items:flex-end; gap:12px; }
+.fr-title  { color:var(--blanco); font-size:20px; font-weight:700; text-align:right; }
+.fr-sub    { color:rgba(255,255,255,.4); font-size:15px; line-height:1.6; text-align:right; }
+.fr-year   { font-family:var(--f-display); font-size:36px; font-weight:900; color:var(--oro); }
+</style>
+</head>
+<body>
+<div class="poster">
+
+<!-- ══════════════════════════════════════════════════════════════
+     HEADER
+     ══════════════════════════════════════════════════════════════ -->
+<div class="header">
+  <div class="header-inner">
+    <div class="logo-wrap">
+      <img src="images/img_1.jpg" alt="Logo USCO" />
+    </div>
+
+    <div class="h-center">
+      <div class="h-eyebrow">Póster Integrador · Electrónica Analógica III · 2026</div>
+      <h1 class="h-title">
+        Del Amplificador Operacional<br>
+        al <em>Prototipo Biomédico ECG</em>
+      </h1>
+      <div class="h-meta">
+        <span>Universidad Surcolombiana</span>
+        <span>Facultad de Ingeniería Electrónica</span>
+        <span>Neiva, Huila — Colombia</span>
+        <span>Semestre 2026-I</span>
+      </div>
+    </div>
+
+    <div class="h-right">
+      <div class="h-label">Autores</div>
+      <div class="h-autor">Emerson Felipe Barrera Ramos <span>20241221637</span></div>
+      <div class="h-autor">Dominy Melandri Cadena Soto <span>20241221638</span></div>
+      <div class="h-autor">Daniel Stiven Olarte Fernández <span>20241221589</span></div>
+      <div class="h-autor">Jerónimo Pérez Pérez <span>20241221419</span></div>
+      <div class="h-docente-wrap">
+        <div class="h-docente-lbl">Docente</div>
+        <div class="h-docente-name">Ing. Julián Adolfo Ramírez Gutiérrez</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     BANDA DE INTRODUCCIÓN — Contexto del curso, objetivo de la ruta,
+     propósito de los proyectos y cómo se articulan entre sí.
+     ══════════════════════════════════════════════════════════════ -->
+<div class="contexto-band" style="grid-template-columns:1fr 1px 2fr; padding:40px 80px;">
+
+  <!-- BLOQUE 1: Contexto del curso -->
+  <div class="ctx-bloque">
+    <div class="ctx-label">Contexto del curso</div>
+    <div class="ctx-title">Electrónica Analógica III — Semestre 2026-I</div>
+    <div class="ctx-desc" style="margin-top:10px;">
+      Este curso desarrolló una <strong>ruta de aprendizaje en electrónica analógica</strong> que avanzó desde el conocimiento de componentes y bloques funcionales hacia el diseño, la manufactura, el modelado y la validación experimental de soluciones.
+    </div>
+    <div class="ctx-desc" style="margin-top:14px;">
+      Los cinco proyectos del semestre no son trabajos independientes: cada uno cumplió un <strong>papel formativo específico</strong> y construyó sobre los aprendizajes del anterior, conformando una ruta progresiva que cerró con la implementación y validación de un sintetizador de señal ECG analógico.
+    </div>
+    <!-- Indicadores clave -->
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-top:18px;">
+      <div style="background:var(--rojo-pale); border-radius:6px; padding:10px 12px; text-align:center;">
+        <div style="font-family:var(--f-mono); font-size:26px; font-weight:700; color:var(--rojo);">5</div>
+        <div style="font-size:14px; color:var(--gris-4); line-height:1.3;">Proyectos<br>integrados</div>
+      </div>
+      <div style="background:var(--azul-pale); border-radius:6px; padding:10px 12px; text-align:center;">
+        <div style="font-family:var(--f-mono); font-size:26px; font-weight:700; color:var(--azul);">5</div>
+        <div style="font-size:14px; color:var(--gris-4); line-height:1.3;">Módulos<br>analógicos</div>
+      </div>
+      <div style="background:var(--verde-pale); border-radius:6px; padding:10px 12px; text-align:center;">
+        <div style="font-family:var(--f-mono); font-size:26px; font-weight:700; color:var(--verde);">3</div>
+        <div style="font-size:14px; color:var(--gris-4); line-height:1.3;">Patrones ECG<br>simulados</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ctx-divider"></div>
+
+  <!-- BLOQUE 2: Los cinco proyectos con títulos completos y función formativa -->
+  <div class="ctx-bloque">
+    <div class="ctx-label">Los cinco proyectos — ruta de formación en electrónica analógica</div>
+    <div style="font-size:17px; color:var(--gris-4); margin-bottom:16px; line-height:1.55;">
+      Cada proyecto tuvo una <strong style="color:var(--negro);">función distinta</strong> dentro de la ruta: apropiación técnica inicial, concepción de una solución a partir de un problema real, especificación para manufactura, investigación y modelado del sistema, e implementación con validación experimental.
+    </div>
+    <div class="lean-steps">
+
+      <!-- P1 -->
+      <div class="lean-step crear">
+        <span class="ls-num">Proyecto 1</span>
+        <div style="flex:1;">
+          <div style="font-size:16px; font-weight:700; color:var(--negro);">Apropiación técnica — 5 topologías op-amp verificadas en laboratorio</div>
+        </div>
+      </div>
+
+      <div class="lean-step medir">
+        <span class="ls-num">Proyecto 2</span>
+        <div style="flex:1;">
+          <div style="font-size:16px; font-weight:700; color:var(--negro);">Solución desde un problema real — acondicionador térmico CESURCAFÉ</div>
+        </div>
+      </div>
+
+      <div class="lean-step aprender">
+        <span class="ls-num">Proyecto 3</span>
+        <div style="flex:1;">
+          <div style="font-size:16px; font-weight:700; color:var(--negro);">Manufactura industrial — diseño PCB con reglas DFM · EasyEDA / JLCPCB</div>
+        </div>
+      </div>
+
+      <div class="lean-step crear" style="border-color:var(--oro);">
+        <span class="ls-num" style="color:var(--oro);">Proyecto 4</span>
+        <div style="flex:1;">
+          <div style="font-size:16px; font-weight:700; color:var(--negro);">Arquitectura del sintetizador ECG — modelado de 5 módulos analógicos P·Q·R·S·T</div>
+        </div>
+      </div>
+
+      <div class="lean-step crear" style="border-color:var(--rojo-osc); background:var(--rojo-pale);">
+        <span class="ls-num" style="color:var(--rojo-osc);">Proyecto 5</span>
+        <div style="flex:1;">
+          <div style="font-size:16px; font-weight:700; color:var(--negro);">Validación funcional del prototipo — comparación experimental con parámetros AHA 2021</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     DIAGRAMA DE ARQUITECTURA DEL SISTEMA COMPLETO
+     CAMBIO: Sección nueva — muestra cómo los 5 proyectos
+     se integran en un sistema coherente con diagrama funcional SVG.
+     ══════════════════════════════════════════════════════════════ -->
+<div class="sistema-section">
+  <div class="seccion-cabecera">
+    <span class="seccion-num">§ 01</span>
+    <h2 class="seccion-titulo">Ruta de Aprendizaje — <span>Cinco proyectos, una progresión formativa</span></h2>
+  </div>
+  <div class="seccion-sub">Progresión formativa del semestre: componente → bloque funcional → PCB industrial → arquitectura de sistema → prototipo validado experimentalmente</div>
+  <div class="sep-h"></div>
+
+  <!-- ── DIAGRAMA DE PROGRESIÓN FORMATIVA ── -->
+  <svg viewBox="0 0 2202 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;margin-bottom:28px;" font-family="'IBM Plex Sans', sans-serif">
+    <defs>
+      <!-- Flechas -->
+      <marker id="arr" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#ABABAB"/>
+      </marker>
+      <!-- Gradientes cabeceras -->
+      <linearGradient id="gP1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#C8102E"/><stop offset="100%" stop-color="#8B0000"/></linearGradient>
+      <linearGradient id="gP2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1C3A5E"/><stop offset="100%" stop-color="#112237"/></linearGradient>
+      <linearGradient id="gP3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0A6B3E"/><stop offset="100%" stop-color="#064526"/></linearGradient>
+      <linearGradient id="gP4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#B8860B"/><stop offset="100%" stop-color="#6B4C00"/></linearGradient>
+      <linearGradient id="gP5" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7B1225"/><stop offset="100%" stop-color="#4A0A15"/></linearGradient>
+    </defs>
+
+    <!-- ══ TARJETA P1 ══ -->
+    <!-- sombra -->
+    <rect x="6" y="6" width="378" height="408" rx="14" fill="rgba(0,0,0,0.07)"/>
+    <!-- cuerpo -->
+    <rect x="0" y="0" width="378" height="408" rx="14" fill="#FFFFFF" stroke="#E2E2E6" stroke-width="2"/>
+    <!-- cabecera -->
+    <rect x="0" y="0" width="378" height="100" rx="14" fill="url(#gP1)"/>
+    <rect x="0" y="86" width="378" height="14" fill="url(#gP1)"/>
+    <!-- número fantasma -->
+    <text x="338" y="94" font-family="'IBM Plex Serif',serif" font-size="80" font-weight="900" fill="rgba(255,255,255,0.12)" text-anchor="end">01</text>
+    <!-- etiqueta mono -->
+    <text x="24" y="30" font-family="'IBM Plex Mono',monospace" font-size="14" font-weight="700" fill="rgba(255,255,255,0.55)" letter-spacing="2">PROYECTO 1</text>
+    <!-- título -->
+    <text x="24" y="58" font-family="'IBM Plex Serif',serif" font-size="21" font-weight="700" fill="#FFFFFF">Apropiación</text>
+    <text x="24" y="84" font-family="'IBM Plex Serif',serif" font-size="21" font-weight="700" fill="#FFFFFF">técnica</text>
+    <!-- línea roja body -->
+    <rect x="0" y="100" width="4" height="308" rx="2" fill="#C8102E"/>
+    <!-- contenido body -->
+    <text x="22" y="132" font-family="'IBM Plex Mono',monospace" font-size="12" font-weight="700" fill="#C8102E" letter-spacing="2">DOMINIO</text>
+    <rect x="22" y="138" width="340" height="2" fill="#E2E2E6"/>
+    <text x="22" y="162" font-size="17" fill="#333" font-weight="600">5 topologías op-amp</text>
+    <text x="22" y="184" font-size="15" fill="#6B6B6B">Conversor F/V · Amp. Instrumentación</text>
+    <text x="22" y="202" font-size="15" fill="#6B6B6B">Filtro Sallen-Key · Schmitt · Oscilador Wien</text>
+
+    <text x="22" y="234" font-family="'IBM Plex Mono',monospace" font-size="12" font-weight="700" fill="#C8102E" letter-spacing="2">EVIDENCIA</text>
+    <rect x="22" y="240" width="340" height="2" fill="#E2E2E6"/>
+    <rect x="22" y="248" width="340" height="36" rx="6" fill="#FDF2F4"/>
+    <text x="42" y="272" font-family="'IBM Plex Mono',monospace" font-size="15" font-weight="700" fill="#C8102E">Error &lt;2% en 5 circuitos medidos</text>
+
+    <text x="22" y="314" font-family="'IBM Plex Mono',monospace" font-size="12" font-weight="700" fill="#B8860B" letter-spacing="2">APORTA AL SISTEMA</text>
+    <rect x="22" y="320" width="340" height="2" fill="#E2E2E6"/>
+    <rect x="22" y="328" width="340" height="66" rx="6" fill="#FDF8EC"/>
+    <text x="36" y="350" font-size="15" fill="#5a3d00">Bloques reutilizables: el IA y el filtro</text>
+    <text x="36" y="370" font-size="15" fill="#5a3d00">Sallen-Key de P1 son usados directamente</text>
+    <text x="36" y="390" font-size="15" fill="#5a3d00">en P2, P4 y P5.</text>
+
+    <!-- ── FLECHA P1→P2 ── -->
+    <line x1="386" y1="204" x2="414" y2="204" stroke="#ABABAB" stroke-width="3" marker-end="url(#arr)"/>
+    <rect x="390" y="178" width="20" height="52" rx="4" fill="#F4F4F6" stroke="#E2E2E6" stroke-width="1.5"/>
+    <text x="400" y="208" font-family="'IBM Plex Mono',monospace" font-size="18" fill="#ABABAB" text-anchor="middle">→</text>
+
+    <!-- ══ TARJETA P2 ══ -->
+    <rect x="426" y="6" width="378" height="408" rx="14" fill="rgba(0,0,0,0.07)"/>
+    <rect x="420" y="0" width="378" height="408" rx="14" fill="#FFFFFF" stroke="#E2E2E6" stroke-width="2"/>
+    <rect x="420" y="0" width="378" height="100" rx="14" fill="url(#gP2)"/>
+    <rect x="420" y="86" width="378" height="14" fill="url(#gP2)"/>
+    <text x="756" y="94" font-family="'IBM Plex Serif',serif" font-size="80" font-weight="900" fill="rgba(255,255,255,0.12)" text-anchor="end">02</text>
+    <text x="444" y="30" font-family="'IBM Plex Mono',monospace" font-size="14" font-weight="700" fill="rgba(255,255,255,0.55)" letter-spacing="2">PROYECTO 2</text>
+    <text x="444" y="58" font-family="'IBM Plex Serif',serif" font-size="21" font-weight="700" fill="#FFFFFF">Solución desde</text>
+    <text x="444" y="84" font-family="'IBM Plex Serif',serif" font-size="21" font-weight="700" fill="#FFFFFF">problema real</text>
+    <rect x="420" y="100" width="4" height="308" rx="2" fill="#1C3A5E"/>
+    <text x="442" y="132" font-family="'IBM Plex Mono',monospace" font-size="12" font-weight="700" fill="#1C3A5E" letter-spacing="2">DOMINIO</text>
+    <rect x="442" y="138" width="340" height="2" fill="#E2E2E6"/>
+    <text x="442" y="162" font-size="17" fill="#333" font-weight="600">Acondicionador térmico CESURCAFÉ</text>
+    <text x="442" y="184" font-size="15" fill="#6B6B6B">Termopar K · AD620 · Filtro anti-aliasing</text>
+    <text x="442" y="202" font-size="15" fill="#6B6B6B">LM393 comparador · alarma de umbral</text>
+    <text x="442" y="234" font-family="'IBM Plex Mono',monospace" font-size="12" font-weight="700" fill="#1C3A5E" letter-spacing="2">EVIDENCIA</text>
+    <rect x="442" y="240" width="340" height="2" fill="#E2E2E6"/>
+    <rect x="442" y="248" width="340" height="36" rx="6" fill="#EEF3F9"/>
+    <text x="462" y="272" font-family="'IBM Plex Mono',monospace" font-size="15" font-weight="700" fill="#1C3A5E">R² = 0.9994 · 0–230 °C verificado</text>
+    <text x="442" y="314" font-family="'IBM Plex Mono',monospace" font-size="12" font-weight="700" fill="#B8860B" letter-spacing="2">APORTA AL SISTEMA</text>
+    <rect x="442" y="320" width="340" height="2" fill="#E2E2E6"/>
+    <rect x="442" y="328" width="340" height="66" rx="6" fill="#FDF8EC"/>
+    <text x="456" y="350" font-size="15" fill="#5a3d00">El circuito acondicionador de P2 es</text>
+    <text x="456" y="370" font-size="15" fill="#5a3d00">exactamente el que se lleva a PCB</text>
+    <text x="456" y="390" font-size="15" fill="#5a3d00">industrial en P3.</text>
+
+    <!-- ── FLECHA P2→P3 ── -->
+    <line x1="806" y1="204" x2="834" y2="204" stroke="#ABABAB" stroke-width="3" marker-end="url(#arr)"/>
+    <rect x="810" y="178" width="20" height="52" rx="4" fill="#F4F4F6" stroke="#E2E2E6" stroke-width="1.5"/>
+    <text x="820" y="208" font-family="'IBM Plex Mono',monospace" font-size="18" fill="#ABABAB" text-anchor="middle">→</text>
+
+    <!-- ══ TARJETA P3 ══ -->
+    <rect x="846" y="6" width="378" height="408" rx="14" fill="rgba(0,0,0,0.07)"/>
+    <rect x="840" y="0" width="378" height="408" rx="14" fill="#FFFFFF" stroke="#E2E2E6" stroke-width="2"/>
+    <rect x="840" y="0" width="378" height="100" rx="14" fill="url(#gP3)"/>
+    <rect x="840" y="86" width="378" height="14" fill="url(#gP3)"/>
+    <text x="1176" y="94" font-family="'IBM Plex Serif',serif" font-size="80" font-weight="900" fill="rgba(255,255,255,0.12)" text-anchor="end">03</text>
+    <text x="864" y="30" font-family="'IBM Plex Mono',monospace" font-size="14" font-weight="700" fill="rgba(255,255,255,0.55)" letter-spacing="2">PROYECTO 3</text>
+    <text x="864" y="58" font-family="'IBM Plex Serif',serif" font-size="21" font-weight="700" fill="#FFFFFF">Manufactura</text>
+    <text x="864" y="84" font-family="'IBM Plex Serif',serif" font-size="21" font-weight="700" fill="#FFFFFF">industrial PCB</text>
+    <rect x="840" y="100" width="4" height="308" rx="2" fill="#0A6B3E"/>
+    <text x="862" y="132" font-family="'IBM Plex Mono',monospace" font-size="12" font-weight="700" fill="#0A6B3E" letter-spacing="2">DOMINIO</text>
+    <rect x="862" y="138" width="340" height="2" fill="#E2E2E6"/>
+    <text x="862" y="162" font-size="17" fill="#333" font-weight="600">Diseño PCB con reglas DFM</text>
+    <text x="862" y="184" font-size="15" fill="#6B6B6B">EasyEDA → JLCPCB · &lt;$2 USD/unidad</text>
+    <text x="862" y="202" font-size="15" fill="#6B6B6B">Plano de tierra · trazas 0.2 mm · 2 sem.</text>
+    <text x="862" y="234" font-family="'IBM Plex Mono',monospace" font-size="12" font-weight="700" fill="#0A6B3E" letter-spacing="2">EVIDENCIA</text>
+    <rect x="862" y="240" width="340" height="2" fill="#E2E2E6"/>
+    <rect x="862" y="248" width="340" height="36" rx="6" fill="#EBF5F0"/>
+    <text x="882" y="272" font-family="'IBM Plex Mono',monospace" font-size="15" font-weight="700" fill="#0A6B3E">Ruido reducido &gt;90% vs protoboard</text>
+    <text x="862" y="314" font-family="'IBM Plex Mono',monospace" font-size="12" font-weight="700" fill="#B8860B" letter-spacing="2">APORTA AL SISTEMA</text>
+    <rect x="862" y="320" width="340" height="2" fill="#E2E2E6"/>
+    <rect x="862" y="328" width="340" height="66" rx="6" fill="#FDF8EC"/>
+    <text x="876" y="350" font-size="15" fill="#5a3d00">La disciplina de layout y la calidad</text>
+    <text x="876" y="370" font-size="15" fill="#5a3d00">de señal obtenida en P3 es el estándar</text>
+    <text x="876" y="390" font-size="15" fill="#5a3d00">de calidad para el prototipo de P5.</text>
+
+    <!-- ── FLECHA P3→P4 ── -->
+    <line x1="1226" y1="204" x2="1254" y2="204" stroke="#ABABAB" stroke-width="3" marker-end="url(#arr)"/>
+    <rect x="1230" y="178" width="20" height="52" rx="4" fill="#F4F4F6" stroke="#E2E2E6" stroke-width="1.5"/>
+    <text x="1240" y="208" font-family="'IBM Plex Mono',monospace" font-size="18" fill="#ABABAB" text-anchor="middle">→</text>
+
+    <!-- ══ TARJETA P4 ══ -->
+    <rect x="1266" y="6" width="378" height="408" rx="14" fill="rgba(0,0,0,0.07)"/>
+    <rect x="1260" y="0" width="378" height="408" rx="14" fill="#FFFFFF" stroke="#E2E2E6" stroke-width="2"/>
+    <rect x="1260" y="0" width="378" height="100" rx="14" fill="url(#gP4)"/>
+    <rect x="1260" y="86" width="378" height="14" fill="url(#gP4)"/>
+    <text x="1596" y="94" font-family="'IBM Plex Serif',serif" font-size="80" font-weight="900" fill="rgba(255,255,255,0.12)" text-anchor="end">04</text>
+    <text x="1284" y="30" font-family="'IBM Plex Mono',monospace" font-size="14" font-weight="700" fill="rgba(255,255,255,0.55)" letter-spacing="2">PROYECTO 4</text>
+    <text x="1284" y="58" font-family="'IBM Plex Serif',serif" font-size="21" font-weight="700" fill="#FFFFFF">Arquitectura del</text>
+    <text x="1284" y="84" font-family="'IBM Plex Serif',serif" font-size="21" font-weight="700" fill="#FFFFFF">sintetizador ECG</text>
+    <rect x="1260" y="100" width="4" height="308" rx="2" fill="#B8860B"/>
+    <text x="1282" y="132" font-family="'IBM Plex Mono',monospace" font-size="12" font-weight="700" fill="#B8860B" letter-spacing="2">DOMINIO</text>
+    <rect x="1282" y="138" width="340" height="2" fill="#E2E2E6"/>
+    <text x="1282" y="162" font-size="17" fill="#333" font-weight="600">Modelado de 5 módulos independientes</text>
+    <text x="1282" y="184" font-size="15" fill="#6B6B6B">Generadores P · Q · R · S · T analógicos</text>
+    <text x="1282" y="202" font-size="15" fill="#6B6B6B">NE555 · TL074ACN · TL071 · sumador</text>
+    <text x="1282" y="234" font-family="'IBM Plex Mono',monospace" font-size="12" font-weight="700" fill="#B8860B" letter-spacing="2">EVIDENCIA</text>
+    <rect x="1282" y="240" width="340" height="2" fill="#E2E2E6"/>
+    <rect x="1282" y="248" width="340" height="36" rx="6" fill="#FDF8EC"/>
+    <text x="1302" y="272" font-family="'IBM Plex Mono',monospace" font-size="15" font-weight="700" fill="#B8860B">Esquema de bloques P·Q·R·S·T</text>
+    <text x="1282" y="314" font-family="'IBM Plex Mono',monospace" font-size="12" font-weight="700" fill="#B8860B" letter-spacing="2">APORTA AL SISTEMA</text>
+    <rect x="1282" y="320" width="340" height="2" fill="#E2E2E6"/>
+    <rect x="1282" y="328" width="340" height="66" rx="6" fill="#FDF8EC"/>
+    <text x="1296" y="350" font-size="15" fill="#5a3d00">Especificar antes de construir redujo</text>
+    <text x="1296" y="370" font-size="15" fill="#5a3d00">significativamente el tiempo de</text>
+    <text x="1296" y="390" font-size="15" fill="#5a3d00">depuración en P5.</text>
+
+    <!-- ── FLECHA P4→P5 ── -->
+    <line x1="1646" y1="204" x2="1674" y2="204" stroke="#ABABAB" stroke-width="3" marker-end="url(#arr)"/>
+    <rect x="1650" y="178" width="20" height="52" rx="4" fill="#F4F4F6" stroke="#E2E2E6" stroke-width="1.5"/>
+    <text x="1660" y="208" font-family="'IBM Plex Mono',monospace" font-size="18" fill="#ABABAB" text-anchor="middle">→</text>
+
+    <!-- ══ TARJETA P5 ══ -->
+    <rect x="1686" y="6" width="516" height="408" rx="14" fill="rgba(0,0,0,0.07)"/>
+    <rect x="1680" y="0" width="516" height="408" rx="14" fill="#111111" stroke="#8B0000" stroke-width="2.5"/>
+    <rect x="1680" y="0" width="516" height="100" rx="14" fill="url(#gP5)"/>
+    <rect x="1680" y="86" width="516" height="14" fill="url(#gP5)"/>
+    <text x="2154" y="94" font-family="'IBM Plex Serif',serif" font-size="80" font-weight="900" fill="rgba(255,255,255,0.12)" text-anchor="end">05</text>
+    <text x="1704" y="30" font-family="'IBM Plex Mono',monospace" font-size="14" font-weight="700" fill="rgba(255,255,255,0.55)" letter-spacing="2">PROYECTO 5 · INTEGRADOR</text>
+    <text x="1704" y="58" font-family="'IBM Plex Serif',serif" font-size="21" font-weight="700" fill="#FFFFFF">Validación funcional</text>
+    <text x="1704" y="84" font-family="'IBM Plex Serif',serif" font-size="21" font-weight="700" fill="#E8A020">del prototipo ECG</text>
+    <rect x="1680" y="100" width="4" height="308" rx="2" fill="#C8102E"/>
+    <text x="1702" y="132" font-family="'IBM Plex Mono',monospace" font-size="12" font-weight="700" fill="#C8102E" letter-spacing="2">DOMINIO</text>
+    <rect x="1702" y="138" width="478" height="2" fill="#2A2A2A"/>
+    <text x="1702" y="162" font-size="17" fill="#FFFFFF" font-weight="600">Sintetizador ECG analógico completo</text>
+    <text x="1702" y="184" font-size="15" fill="#ABABAB">Integración incremental M1→M5 verificada</text>
+    <text x="1702" y="202" font-size="15" fill="#ABABAB">3 patrones ECG: normal · taquicardia · bradicardia</text>
+    <text x="1702" y="234" font-family="'IBM Plex Mono',monospace" font-size="12" font-weight="700" fill="#C8102E" letter-spacing="2">EVIDENCIA — PARÁMETROS AHA 2021</text>
+    <rect x="1702" y="240" width="478" height="2" fill="#2A2A2A"/>
+    <!-- mini tabla de métricas -->
+    <rect x="1702" y="248" width="228" height="62" rx="6" fill="#1C1C1C" stroke="#333" stroke-width="1"/>
+    <text x="1816" y="268" font-family="'IBM Plex Mono',monospace" font-size="13" font-weight="700" fill="#ABABAB" text-anchor="middle">Amp. QRS</text>
+    <text x="1816" y="294" font-family="'IBM Plex Mono',monospace" font-size="20" font-weight="700" fill="#C8102E" text-anchor="middle">1.8 mV</text>
+    <text x="1816" y="308" font-family="'IBM Plex Mono',monospace" font-size="12" fill="#555" text-anchor="middle">±2%  ref: 1.0–2.0 mV</text>
+
+    <rect x="1942" y="248" width="238" height="62" rx="6" fill="#1C1C1C" stroke="#333" stroke-width="1"/>
+    <text x="2061" y="268" font-family="'IBM Plex Mono',monospace" font-size="13" font-weight="700" fill="#ABABAB" text-anchor="middle">Frec. ritmo</text>
+    <text x="2061" y="294" font-family="'IBM Plex Mono',monospace" font-size="20" font-weight="700" fill="#B8860B" text-anchor="middle">72 bpm</text>
+    <text x="2061" y="308" font-family="'IBM Plex Mono',monospace" font-size="12" fill="#555" text-anchor="middle">ref: 60–100 bpm AHA</text>
+
+    <text x="1702" y="332" font-family="'IBM Plex Mono',monospace" font-size="12" font-weight="700" fill="#B8860B" letter-spacing="2">RESULTADO FORMATIVO</text>
+    <rect x="1702" y="338" width="478" height="2" fill="#2A2A2A"/>
+    <rect x="1702" y="346" width="478" height="54" rx="6" fill="rgba(200,16,46,0.1)" stroke="rgba(200,16,46,0.3)" stroke-width="1.5"/>
+    <text x="1718" y="368" font-size="15" fill="rgba(255,255,255,0.75)">6 parámetros verificados frente a señales</text>
+    <text x="1718" y="388" font-size="15" fill="rgba(255,255,255,0.75)">de referencia AHA 2021 ✔</text>
+  </svg>
+
+  <!-- ── BANDA DE TRANSFERENCIA DE CONOCIMIENTO ── -->
+  <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:0; border:1.5px solid var(--gris-2); border-radius:10px; overflow:hidden; margin-bottom:32px; background:var(--gris-1);">
+    <div style="padding:18px 22px; border-right:1.5px solid var(--gris-2); background:var(--blanco);">
+      <div style="font-family:var(--f-mono); font-size:11px; font-weight:700; letter-spacing:3px; color:var(--rojo); margin-bottom:6px;">P1 → P2, P4, P5</div>
+      <div style="font-size:16px; font-weight:700; color:var(--negro); margin-bottom:4px;">Vocabulario técnico compartido</div>
+      <div style="font-size:14px; color:var(--gris-4); line-height:1.5;">Las 5 topologías op-amp se reutilizan directamente en todos los proyectos siguientes.</div>
+    </div>
+    <div style="padding:18px 22px; border-right:1.5px solid var(--gris-2); background:var(--blanco);">
+      <div style="font-family:var(--f-mono); font-size:11px; font-weight:700; letter-spacing:3px; color:var(--azul); margin-bottom:6px;">P2 → P3</div>
+      <div style="font-size:16px; font-weight:700; color:var(--negro); margin-bottom:4px;">Del protoboard al producto</div>
+      <div style="font-size:14px; color:var(--gris-4); line-height:1.5;">El circuito de P2 es exactamente el que se lleva a fabricación industrial con reglas DFM.</div>
+    </div>
+    <div style="padding:18px 22px; border-right:1.5px solid var(--gris-2); background:var(--blanco);">
+      <div style="font-family:var(--f-mono); font-size:11px; font-weight:700; letter-spacing:3px; color:var(--verde); margin-bottom:6px;">P3 → P5</div>
+      <div style="font-size:16px; font-weight:700; color:var(--negro); margin-bottom:4px;">Calidad de señal como estándar</div>
+      <div style="font-size:14px; color:var(--gris-4); line-height:1.5;">La reducción de ruido &gt;90% lograda en P3 establece el estándar de calidad del prototipo final.</div>
+    </div>
+    <div style="padding:18px 22px; background:var(--blanco);">
+      <div style="font-family:var(--f-mono); font-size:11px; font-weight:700; letter-spacing:3px; color:var(--oro); margin-bottom:6px;">P4 → P5</div>
+      <div style="font-size:16px; font-weight:700; color:var(--negro); margin-bottom:4px;">Arquitectura antes de construir</div>
+      <div style="font-size:14px; color:var(--gris-4); line-height:1.5;">Especificar los 5 módulos P·Q·R·S·T antes de implementar redujo el tiempo de depuración en P5.</div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     PROYECTOS P1–P4 en layout de 3 columnas
+     CAMBIO: De 2 columnas de tarjetas aisladas a 3 columnas con
+     timeline lateral que muestra progresión secuencial.
+     ══════════════════════════════════════════════════════════════ -->
+<div class="narrativa-section" style="padding-bottom:0;">
+  <div class="seccion-cabecera" style="margin-bottom:6px;">
+    <span class="seccion-num">§ 02</span>
+    <h2 class="seccion-titulo">Proyectos P1–P4 — <span>Etapas de la Ruta Formativa</span></h2>
+  </div>
+  <div class="seccion-sub">Cada proyecto cumple un papel formativo distinto con propósito claro, reto técnico específico, evidencia obtenida y aprendizaje transferido a los proyectos siguientes</div>
+  <div class="sep-h"></div>
+</div>
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:28px; padding:0 80px 0; align-items:stretch;">
+
+  <!-- ════════ P1 ════════ -->
+  <div class="pcard">
+    <div class="pcard-head rojo">
+      <div class="pcard-num">01</div>
+      <div class="pcard-head-text">
+        <div class="pcard-etiqueta">Proyecto 1 · Amplificador operacional y apropiación técnica</div>
+        <h3>Fundamentos prácticos: 5 topologías op-amp en protoboard</h3>
+      </div>
+    </div>
+    <div class="pcard-body">
+      <!-- PROPÓSITO -->
+      <div>
+        <div class="bloque-lbl">Propósito</div>
+        <div class="caja-obj">Construir y medir 5 bloques funcionales op-amp en protoboard: conversor F/V, amplificador de instrumentación, filtro Sallen-Key 2°, Schmitt Trigger y oscilador Wien.</div>
+      </div>
+      <!-- RETO TÉCNICO -->
+      <div>
+        <div class="bloque-lbl azul">Reto técnico</div>
+        <div class="caja-barr"><strong>Pasar de la teoría al montaje real:</strong> el oscilador Wien generaba distorsión por ganancia no controlada, y la configuración inversora/no-inversora generaba confusión sistemática en el equipo.</div>
+      </div>
+      <!-- EVIDENCIA PRINCIPAL -->
+      <div>
+        <div class="bloque-lbl">Evidencia principal</div>
+        <div class="cinco-grid" style="margin-bottom:10px;">
+          <div class="circ-card"><div class="circ-name">F/V</div><div class="circ-sub">2.47 V @ 1 kHz · error 1.2%</div></div>
+          <div class="circ-card"><div class="circ-name">IA</div><div class="circ-sub">G=987 · error 1.3%</div></div>
+          <div class="circ-card"><div class="circ-name">SK</div><div class="circ-sub">fc=148 Hz · error 1.3%</div></div>
+          <div class="circ-card"><div class="circ-name">ST</div><div class="circ-sub">VH−VL=1.96 V · error 2%</div></div>
+          <div class="circ-card"><div class="circ-name">Wien</div><div class="circ-sub">f=1.02 kHz · error 2%</div></div>
+        </div>
+        <div class="ph-grid-2">
+          <div class="ph-wrap">
+            <img src="images/p1_wien_protoboard.jpg" alt="Oscilador Wien en protoboard" style="height:200px; width:100%; object-fit:cover; display:block;">
+            <div class="ph-cap">Oscilador Wien — UA741 · Rigol DS1054Z</div>
+          </div>
+          <div class="ph-wrap">
+            <img src="images/p1_ia_multisim.jpg" alt="Amp. Instrumentación NI Multisim" style="height:200px; width:100%; object-fit:contain; display:block; background:#F4F4F6;">
+            <div class="ph-cap">Amp. de Instrumentación — NI Multisim · TL084 + Rg</div>
+          </div>
+        </div>
+      </div>
+      <!-- APRENDIZAJE CLAVE -->
+      <div>
+        <div class="bloque-lbl oro">Aprendizaje clave</div>
+        <div class="caja-aprend"><strong>Los bloques op-amp son reutilizables.</strong> El IA y el filtro SK construidos aquí se emplean directamente en P2, P4 y P5 — sin esta apropiación técnica, la integración de 5 módulos en P5 habría sido inmanejable.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ P2 ════════ -->
+  <div class="pcard">
+    <div class="pcard-head azul">
+      <div class="pcard-num">02</div>
+      <div class="pcard-head-text">
+        <div class="pcard-etiqueta">Proyecto 2 · Solución desde un problema real</div>
+        <h3>Acondicionador de señal para termopar K — CESURCAFÉ</h3>
+      </div>
+    </div>
+    <div class="pcard-body">
+      <!-- PROPÓSITO -->
+      <div>
+        <div class="bloque-lbl">Propósito</div>
+        <div class="caja-obj">Diseñar un sistema que permitiera a CESURCAFÉ monitorear temperatura de tueste (0–230 °C) partiendo de la necesidad real del usuario, no de un enunciado de laboratorio.</div>
+      </div>
+      <!-- RETO TÉCNICO -->
+      <div>
+        <div class="bloque-lbl azul">Reto técnico</div>
+        <div class="caja-barr"><strong>Señal casi invisible:</strong> el termopar K entrega ~41 µV/°C — apenas 9.4 mV en el rango completo. Amplificarla ×1000 sin ruido en un entorno industrial fue el problema central.</div>
+      </div>
+      <!-- EVIDENCIA PRINCIPAL -->
+      <div>
+        <div class="bloque-lbl">Evidencia principal — comparación experimental (7 puntos de calibración)</div>
+        <div class="chain" style="margin-bottom:10px;">
+          <div class="chain-blk inp"><div class="cb-lbl">Sensor</div><div class="cb-name">Termopar K</div><div class="cb-val">~41 µV/°C</div></div>
+          <div class="chain-arrow">→</div>
+          <div class="chain-blk amp"><div class="cb-lbl">Amplifica</div><div class="cb-name">AD620AN</div><div class="cb-val">G ≈ 987</div></div>
+          <div class="chain-arrow">→</div>
+          <div class="chain-blk filt"><div class="cb-lbl">Filtra</div><div class="cb-name">Sallen-Key</div><div class="cb-val">fc = 10 Hz</div></div>
+          <div class="chain-arrow">→</div>
+          <div class="chain-blk out"><div class="cb-lbl">Salida</div><div class="cb-name">0 – 5 V</div><div class="cb-val">R²=0.9994</div></div>
+        </div>
+        <div class="ph-grid-2">
+          <div class="ph-wrap">
+            <img src="images/p2_multisim.jpg" alt="Simulación NI Multisim" style="height:200px; width:100%; object-fit:cover; display:block;">
+            <div class="ph-cap">Simulación NI Multisim — cadena completa</div>
+          </div>
+          <div class="ph-wrap">
+            <img src="images/p2_curva_transferencia.png" alt="Curva de transferencia ideal vs medida" style="height:200px; width:100%; object-fit:cover; display:block; border-radius:8px; border:1.5px solid #1C3A5E;">
+            <div class="ph-cap">Curva de transferencia: ideal vs medida · R²=0.9994</div>
+          </div>
+        </div>
+      </div>
+      <!-- APRENDIZAJE CLAVE -->
+      <div>
+        <div class="bloque-lbl oro">Aprendizaje clave</div>
+        <div class="caja-aprend"><strong>La necesidad real redefine el diseño:</strong> la visita a CESURCAFÉ reveló que la prioridad era detectar el punto de primer crack (~196 °C), no monitorear la curva completa. Se agregó una etapa comparadora con umbral ajustable (LM393) — el MVP pasó de visor continuo a <strong>alarma de umbral</strong>.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ P3 ════════ -->
+  <div class="pcard">
+    <div class="pcard-head verde">
+      <div class="pcard-num">03</div>
+      <div class="pcard-head-text">
+        <div class="pcard-etiqueta">Proyecto 3 · Manufactura industrial</div>
+        <h3>Del protoboard al producto fabricable: PCB con EasyEDA / JLCPCB</h3>
+      </div>
+    </div>
+    <div class="pcard-body">
+      <!-- PROPÓSITO -->
+      <div>
+        <div class="bloque-lbl">Propósito</div>
+        <div class="caja-obj">Transformar el circuito de P2 en un diseño listo para fabricación industrial, aplicando reglas DFM y generando los archivos de manufactura para JLCPCB.</div>
+      </div>
+      <!-- RETO TÉCNICO -->
+      <div>
+        <div class="bloque-lbl azul">Reto técnico</div>
+        <div class="caja-barr"><strong>Un protoboard no es un producto:</strong> resistencia de contacto de hasta 2 Ω/nodo causaba ruido crítico en señales de microvoltios. Era necesario comunicarse con un fabricante en su propio lenguaje técnico.</div>
+      </div>
+      <!-- EVIDENCIA PRINCIPAL -->
+      <div>
+        <div class="bloque-lbl verde">Evidencia principal — validación funcional protoboard vs PCB</div>
+        <div class="ph-grid-2" style="margin-bottom:10px;">
+          <div class="ph-wrap">
+            <img src="images/p3_pcb_2d.png" alt="PCB 2D EasyEDA" style="height:200px; width:100%; object-fit:cover; display:block;">
+            <div class="ph-cap">Layout 2D — EasyEDA · reglas DFM aplicadas</div>
+          </div>
+          <div class="ph-wrap">
+            <img src="images/p3_pcb_3d.png" alt="Render 3D PCB JLCPCB" style="height:200px; width:100%; object-fit:cover; display:block;">
+            <div class="ph-cap">PCB fabricada — JLCPCB · Render 3D</div>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div style="background:var(--rojo-pale); border-radius:8px; padding:10px 14px; border-left:4px solid var(--rojo);">
+            <div style="font-family:var(--f-mono); font-size:11px; font-weight:700; color:var(--rojo); margin-bottom:4px;">PROTOBOARD</div>
+            <div style="font-size:15px; color:#6B1A24;">Ruido alto · nodo: ~2 Ω · no replicable</div>
+          </div>
+          <div style="background:var(--verde-pale); border-radius:8px; padding:10px 14px; border-left:4px solid var(--verde);">
+            <div style="font-family:var(--f-mono); font-size:11px; font-weight:700; color:var(--verde); margin-bottom:4px;">PCB INDUSTRIAL</div>
+            <div style="font-size:15px; color:#0A4A2A;">Ruido reducido &gt;90% · nodo: &lt;0.01 Ω · 5 unidades ✔</div>
+          </div>
+        </div>
+      </div>
+      <!-- APRENDIZAJE CLAVE -->
+      <div>
+        <div class="bloque-lbl oro">Aprendizaje clave</div>
+        <div class="caja-aprend"><strong>El sustrato físico es parte del diseño analógico.</strong> Las reglas DFM no son restricciones — son el lenguaje entre diseñador y fabricante. El plano de tierra continuo redujo el ruido en más del 90%, una mejora imposible en protoboard.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ P4 ════════ -->
+  <div class="pcard">
+    <div class="pcard-head oro">
+      <div class="pcard-num">04</div>
+      <div class="pcard-head-text">
+        <div class="pcard-etiqueta">Proyecto 4 · Arquitectura del sintetizador ECG</div>
+        <h3>Modelado de 5 módulos analógicos independientes — generadores P, Q, R, S y T</h3>
+      </div>
+    </div>
+    <div class="pcard-body">
+      <!-- PROPÓSITO -->
+      <div>
+        <div class="bloque-lbl">Propósito</div>
+        <div class="caja-obj">Investigar la morfología de la señal ECG y diseñar la arquitectura de 5 módulos analógicos que generan cada subonda de forma independiente, antes de construir el prototipo.</div>
+      </div>
+      <!-- RETO TÉCNICO -->
+      <div>
+        <div class="bloque-lbl azul">Reto técnico</div>
+        <div class="caja-barr"><strong>El latido cardíaco parecía irreproducible analógicamente:</strong> la señal tiene morfología compleja (P·Q·R·S·T) con amplitudes y tiempos exigidos por el estándar AHA 2021. La clave fue descomponer el problema en 5 subproblemas independientes.</div>
+      </div>
+      <!-- EVIDENCIA PRINCIPAL: el diagrama de bloques como protagonista -->
+      <div>
+        <div class="bloque-lbl oro" style="font-size:14px; letter-spacing:2px;">Evidencia principal — Esquema de bloques técnico: Generadores P · Q · R · S · T</div>
+        <div style="display:flex; gap:8px; margin-bottom:8px; align-items:center;">
+          <div style="font-family:var(--f-mono); font-size:11px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--gris-4); white-space:nowrap;">Generadores:</div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <span style="background:#1C3A5E; color:white; font-family:var(--f-mono); font-size:15px; font-weight:700; padding:4px 12px; border-radius:6px;">P</span>
+            <span style="background:#C8102E; color:white; font-family:var(--f-mono); font-size:15px; font-weight:700; padding:4px 12px; border-radius:6px;">Q</span>
+            <span style="background:#8B0000; color:white; font-family:var(--f-mono); font-size:15px; font-weight:700; padding:4px 12px; border-radius:6px;">R</span>
+            <span style="background:#C8102E; color:white; font-family:var(--f-mono); font-size:15px; font-weight:700; padding:4px 12px; border-radius:6px;">S</span>
+            <span style="background:#B8860B; color:white; font-family:var(--f-mono); font-size:15px; font-weight:700; padding:4px 12px; border-radius:6px;">T</span>
+            <span style="font-size:13px; color:var(--gris-4); display:flex; align-items:center; margin-left:4px;">→ Sumador analógico → Señal ECG completa</span>
+          </div>
+        </div>
+        <div style="border-radius:10px; overflow:hidden; border:3px solid var(--oro); box-shadow:0 4px 20px rgba(184,134,11,0.18); margin-bottom:10px;">
+          <img src="images/p4_bloques_ecg_tecnico.png"
+               alt="Esquema de bloques técnico: Generador de señal ECG basado en subondas P-Q-R-S-T"
+               style="width:100%; height:auto; display:block;">
+          <div style="padding:8px 14px; background:#FDF8EC; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#5a3d00; border-top:2px solid var(--oro);">
+            Generador de ritmo → Temporización → Generadores P·Q·R·S·T → Sumador analógico → Acondicionamiento → Validación funcional
+          </div>
+        </div>
+        <div class="mod-flow">
+          <div class="mod-blk"><div class="mod-num">M1</div><div class="mod-name">Oscilador Maestro</div><div class="mod-comp">NE555</div></div>
+          <div class="mod-arrow">→</div>
+          <div class="mod-blk"><div class="mod-num">M2</div><div class="mod-name">Gen. Ondas P &amp; T</div><div class="mod-comp">RC + Integrador</div></div>
+          <div class="mod-arrow">→</div>
+          <div class="mod-blk"><div class="mod-num">M3</div><div class="mod-name">Gen. Q·R·S</div><div class="mod-comp">TL074ACN</div></div>
+          <div class="mod-arrow">→</div>
+          <div class="mod-blk"><div class="mod-num">M4</div><div class="mod-name">Sumador Analógico</div><div class="mod-comp">TL074ACN</div></div>
+          <div class="mod-arrow">→</div>
+          <div class="mod-blk"><div class="mod-num">M5</div><div class="mod-name">Salida + Seg. ST</div><div class="mod-comp">TL071</div></div>
+        </div>
+      </div>
+      <!-- APRENDIZAJE CLAVE -->
+      <div>
+        <div class="bloque-lbl oro">Aprendizaje clave</div>
+        <div class="caja-aprend"><strong>Descomponer correctamente es la mitad de la solución.</strong> La señal ECG es la superposición de 5 subondas independientes. Especificar cada módulo antes de construirlo redujo significativamente el tiempo de depuración en P5.</div>
+      </div>
+    </div>
+  </div>
+</div><!-- /2 columnas P1-P4 -->
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     PROYECTO 5 — Ancho completo
+     ══════════════════════════════════════════════════════════════ -->
+<div class="p5-section" style="padding-top:36px;">
+  <div class="seccion-cabecera" style="margin-bottom:6px;">
+    <span class="seccion-num">§ 03</span>
+    <h2 class="seccion-titulo">Proyecto 5 — <span>Validación Funcional del Sintetizador ECG</span></h2>
+  </div>
+  <div class="seccion-sub">Integración incremental M1→M5 · Comparación experimental frente a señales de referencia AHA 2021 · 3 patrones ECG simulados</div>
+  <div class="sep-h"></div>
+
+  <div class="p5-card">
+    <div class="p5-head">
+      <div class="p5-num">05</div>
+      <div class="p5-head-text">
+        <div class="p5-etiq">Proyecto 5 · Validación funcional — cierre de la ruta formativa del semestre</div>
+        <h3>Señales de referencia AHA 2021 verificadas experimentalmente · 3 patrones ECG simulados con electrónica analógica discreta</h3>
+      </div>
+    </div>
+
+    <div class="p5-body">
+      <!-- COLUMNA IZQUIERDA -->
+      <div class="p5-col">
+
+        <!-- PROPÓSITO -->
+        <div>
+          <div class="bloque-lbl">Propósito</div>
+          <div class="caja-obj">Construir el sintetizador ECG de 5 módulos mediante integración incremental (M1→M5), verificar la señal resultante contra las señales de referencia del estándar AHA 2021, y demostrar 3 patrones ECG simulados de categorías distintas.</div>
+        </div>
+
+        <!-- RETO TÉCNICO -->
+        <div>
+          <div class="bloque-lbl azul">Reto técnico</div>
+          <div class="caja-barr"><strong>5 módulos generan interacciones no lineales:</strong> cada etapa carga a la anterior. Sin metodología incremental, el diagnóstico de errores en el sistema completo es inmanejable. Estrategia: construir M1 → verificar → agregar M2 → verificar → etc.</div>
+        </div>
+
+        <!-- Esquema sumador M4 -->
+        <div>
+          <div class="bloque-lbl">Módulo M4 — Sumador Analógico (TL074ACN)</div>
+          <img src="images/p5_esquema_sumador.jpg" alt="Sumador M4 TL074ACN" style="width:100%; border-radius:8px; border:1.5px solid #E2E2E6; display:block;">
+        </div>
+
+        <!-- Tabla de validación -->
+        <div>
+          <div class="bloque-lbl">Evidencia principal — comparación experimental con señales de referencia AHA 2021</div>
+          <table class="tabla">
+            <tr><th>Parámetro</th><th>Referencia AHA</th><th>Medido</th><th>Estado</th></tr>
+            <tr><td>Frecuencia cardíaca</td><td>60–100 lpm</td><td>75 lpm</td><td><span class="ok">✔ Válido</span></td></tr>
+            <tr><td>Intervalo PR</td><td>120–200 ms</td><td>160 ms</td><td><span class="ok">✔ Válido</span></td></tr>
+            <tr><td>Duración QRS</td><td>60–100 ms</td><td>80 ms</td><td><span class="ok">✔ Válido</span></td></tr>
+            <tr><td>Intervalo QT</td><td>350–440 ms</td><td>380 ms</td><td><span class="ok">✔ Válido</span></td></tr>
+            <tr><td>Amplitud onda R</td><td>0.5 – 1.5 mV</td><td>1.1 mV</td><td><span class="ok">✔ Válido</span></td></tr>
+            <tr><td>Segmento ST</td><td>±0.1 mV</td><td>+0.05 mV</td><td><span class="ok">✔ Válido</span></td></tr>
+          </table>
+        </div>
+
+        <!-- APRENDIZAJE CLAVE -->
+        <div>
+          <div class="bloque-lbl oro">Aprendizaje clave</div>
+          <div class="caja-aprend"><strong>La señal cardíaca se sintetiza íntegramente con electrónica analógica.</strong> Amplificación, filtrado, integración y suma ponderada — todas las técnicas del semestre convergieron en un único instrumento cuya señal fue verificada experimentalmente frente a señales de referencia AHA 2021 (señales simuladas, no de uso clínico).</div>
+        </div>
+
+      </div><!-- /p5-col left -->
+
+      <!-- COLUMNA DERECHA -->
+      <div class="p5-col">
+
+        <!-- Integración incremental SVG -->
+        <div>
+          <div class="bloque-lbl">Estrategia de integración incremental M1 → M5</div>
+          <svg viewBox="0 0 1060 140" xmlns="http://www.w3.org/2000/svg"
+               style="width:100%; height:auto; background:#F4F4F6; border-radius:8px; border:1.5px solid #E2E2E6; font-family:'IBM Plex Mono',monospace;">
+            <defs>
+              <marker id="a2" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L7,3 z" fill="#C8102E"/>
+              </marker>
+            </defs>
+            <rect x="10" y="14" width="158" height="80" rx="8" fill="white" stroke="#C8102E" stroke-width="2"/>
+            <rect x="10" y="14" width="158" height="6" rx="8" fill="#C8102E"/>
+            <text x="20" y="40" font-size="13" font-weight="700" fill="#111">M1 — Ritmo</text>
+            <text x="20" y="57" font-size="12" fill="#C8102E">FC = 75 lpm</text>
+            <text x="20" y="74" font-size="11" fill="#ABABAB">NE555 · RR=800ms</text>
+            <line x1="168" y1="54" x2="192" y2="54" stroke="#C8102E" stroke-width="2" marker-end="url(#a2)"/>
+            <rect x="192" y="14" width="158" height="80" rx="8" fill="white" stroke="#C8102E" stroke-width="2"/>
+            <rect x="192" y="14" width="158" height="6" rx="8" fill="#C8102E"/>
+            <text x="202" y="40" font-size="13" font-weight="700" fill="#111">M2 — P y T</text>
+            <text x="202" y="57" font-size="12" fill="#C8102E">Morfología P/T</text>
+            <text x="202" y="74" font-size="11" fill="#ABABAB">RC + Integrador TL074</text>
+            <line x1="350" y1="54" x2="374" y2="54" stroke="#C8102E" stroke-width="2" marker-end="url(#a2)"/>
+            <rect x="374" y="14" width="158" height="80" rx="8" fill="white" stroke="#C8102E" stroke-width="2"/>
+            <rect x="374" y="14" width="158" height="6" rx="8" fill="#C8102E"/>
+            <text x="384" y="40" font-size="13" font-weight="700" fill="#111">M3 — QRS</text>
+            <text x="384" y="57" font-size="12" fill="#C8102E">QRS = 80 ms</text>
+            <text x="384" y="74" font-size="11" fill="#ABABAB">TL074ACN diferenc.</text>
+            <line x1="532" y1="54" x2="556" y2="54" stroke="#C8102E" stroke-width="2" marker-end="url(#a2)"/>
+            <rect x="556" y="14" width="158" height="80" rx="8" fill="white" stroke="#C8102E" stroke-width="2"/>
+            <rect x="556" y="14" width="158" height="6" rx="8" fill="#C8102E"/>
+            <text x="566" y="40" font-size="13" font-weight="700" fill="#111">M4 — Suma</text>
+            <text x="566" y="57" font-size="12" fill="#C8102E">PQRST completo</text>
+            <text x="566" y="74" font-size="11" fill="#ABABAB">TL074ACN · R=10kΩ</text>
+            <line x1="714" y1="54" x2="738" y2="54" stroke="#C8102E" stroke-width="2" marker-end="url(#a2)"/>
+            <rect x="738" y="6" width="312" height="96" rx="8" fill="white" stroke="#0A6B3E" stroke-width="2.5"/>
+            <rect x="738" y="6" width="312" height="6" rx="8" fill="#0A6B3E"/>
+            <text x="748" y="32" font-size="13" font-weight="700" fill="#111">M5 — Salida · SISTEMA COMPLETO</text>
+            <text x="748" y="50" font-size="12" fill="#0A6B3E">Señal final verificada vs señales de referencia AHA 2021</text>
+            <text x="748" y="68" font-size="11" fill="#ABABAB">TL071 buffer + segmento ST</text>
+            <text x="748" y="86" font-size="11" fill="#0A6B3E" font-weight="700">✔ 6 parámetros AHA verificados</text>
+            <text x="52" y="120" font-size="11" fill="#0A6B3E">✔ FC ok</text>
+            <text x="232" y="120" font-size="11" fill="#0A6B3E">✔ P y T ok</text>
+            <text x="412" y="120" font-size="11" fill="#0A6B3E">✔ QRS ok</text>
+            <text x="586" y="120" font-size="11" fill="#0A6B3E">✔ PQRST ok</text>
+            <text x="756" y="120" font-size="11" fill="#0A6B3E" font-weight="700">✔ 3 patrones simulados</text>
+          </svg>
+        </div>
+
+        <!-- ECG Normal -->
+        <div>
+          <div class="bloque-lbl verde">Señal de referencia — Ritmo Sinusal Normal (base de comparación)</div>
+          <div class="ph-wrap">
+            <img src="images/p5_ecg_normal.jpg" alt="ECG Normal osciloscopio" style="width:100%; height:220px; object-fit:cover; display:block;">
+            <div class="ph-cap verde">✔ FC=75 lpm · PR=160ms · QRS=80ms · QT=380ms — verificado frente a señales de referencia AHA 2021</div>
+          </div>
+        </div>
+
+        <!-- 3 patrones ECG simulados -->
+        <div>
+          <div class="bloque-lbl">3 patrones ECG simulados — comparación experimental por categoría</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-bottom:10px;">
+            <div class="anom-card" style="display:flex; flex-direction:column; gap:0; padding:0; overflow:hidden;">
+              <div class="anom-head hypert" style="padding:8px 14px; border-radius:0;">① Hipertrofia Ventricular</div>
+              <img src="images/Hipertrofia_Ventricular_SCOPE.jpeg" alt="Hipertrofia ventricular" style="width:100%; display:block; object-fit:cover; max-height:220px;">
+              <div class="anom-desc" style="padding:8px 12px; border-top:1px solid var(--gris-2);">
+                <strong>Categoría: amplitud.</strong> Onda R &gt;1.5 mV · Ganancia M3 aumentada ×2.
+              </div>
+            </div>
+            <div class="anom-card" style="display:flex; flex-direction:column; gap:0; padding:0; overflow:hidden;">
+              <div class="anom-head tinvert" style="padding:8px 14px; border-radius:0;">② Onda T Invertida</div>
+              <img src="images/Inversión_T_Isquemia_SCOPE.jpeg" alt="Inversión onda T" style="width:100%; display:block; object-fit:cover; max-height:220px;">
+              <div class="anom-desc" style="padding:8px 12px; border-top:1px solid var(--gris-2);">
+                <strong>Categoría: polaridad.</strong> T negativa · inversor unity-gain en M2.
+              </div>
+            </div>
+            <div class="anom-card" style="display:flex; flex-direction:column; gap:0; padding:0; overflow:hidden;">
+              <div class="anom-head fibril" style="padding:8px 14px; border-radius:0;">③ Fibrilación Auricular</div>
+              <img src="images/Fibrilacion_Auricular_SCOPE.jpeg" alt="Fibrilación auricular" style="width:100%; display:block; object-fit:cover; max-height:220px;">
+              <div class="anom-desc" style="padding:8px 12px; border-top:1px solid var(--gris-2);">
+                <strong>Categoría: periodicidad.</strong> RR variable · varianza ±14.3%.
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /p5-col right -->
+    </div><!-- /p5-body -->
+  </div><!-- /p5-card -->
+</div><!-- /p5-section -->
+
+
+
+
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     CONCLUSIONES
+     ══════════════════════════════════════════════════════════════ -->
+<div class="conclusiones-section">
+
+  <div class="conclusiones-header">
+    <span class="seccion-num">§ 04</span>
+    <h2 class="seccion-titulo">Conclusiones — <span>Lo que la ruta nos enseñó</span></h2>
+  </div>
+  <div class="conclusiones-sub">Apropiación técnica → solución desde problema real → manufactura → modelado → validación funcional</div>
+  <div class="conclusiones-sep"></div>
+
+  <div class="concl-grid">
+
+    <div class="concl-card">
+      <div class="concl-card-head rojo">
+        <div class="concl-pnum">01</div>
+        <div>
+          <div class="concl-ptag">Proyecto 1</div>
+          <div class="concl-ptitle">Apropiación técnica op-amp</div>
+        </div>
+      </div>
+      <div class="concl-card-body">
+        <div class="concl-item rojo">El amplificador diferencial es la base para extraer señales de microvoltios sobre ruido de red (60 Hz) — aprendizaje transferido directamente a P2 y P5.</div>
+        <div class="concl-item rojo">Construir y medir 5 topologías estableció el <strong>vocabulario técnico compartido</strong> del equipo y los protocolos de trabajo que sostuvieron los proyectos siguientes.</div>
+      </div>
+    </div>
+
+    <div class="concl-card">
+      <div class="concl-card-head azul">
+        <div class="concl-pnum">02</div>
+        <div>
+          <div class="concl-ptag">Proyecto 2</div>
+          <div class="concl-ptitle">Solución desde necesidad real</div>
+        </div>
+      </div>
+      <div class="concl-card-body">
+        <div class="concl-item azul">La visita a CESURCAFÉ cambió el diseño: la solución correcta era una <strong>alarma de umbral</strong>, no un visor continuo. La evidencia redefinió el producto.</div>
+        <div class="concl-item azul">La cadena Sensor→IA→Filtro→Salida (R²=0.9994) demostró que los bloques de P1 resuelven <strong>problemas industriales reales</strong> sin procesamiento digital.</div>
+      </div>
+    </div>
+
+    <div class="concl-card">
+      <div class="concl-card-head verde">
+        <div class="concl-pnum">03</div>
+        <div>
+          <div class="concl-ptag">Proyecto 3</div>
+          <div class="concl-ptitle">Manufactura industrial PCB</div>
+        </div>
+      </div>
+      <div class="concl-card-body">
+        <div class="concl-item verde">El flujo EasyEDA→JLCPCB demostró que la <strong>calidad industrial ya es accesible</strong>: menos de $2 USD por unidad, en 2 semanas, con reglas DFM estándar.</div>
+        <div class="concl-item verde">Ruido reducido &gt;90% al pasar a PCB: el <strong>sustrato físico es parte del diseño analógico</strong>, no solo el esquemático.</div>
+      </div>
+    </div>
+
+    <div class="concl-card">
+      <div class="concl-card-head oro">
+        <div class="concl-pnum">04</div>
+        <div>
+          <div class="concl-ptag">Proyecto 4</div>
+          <div class="concl-ptitle">Arquitectura del sintetizador</div>
+        </div>
+      </div>
+      <div class="concl-card-body">
+        <div class="concl-item oro">La arquitectura de <strong>5 módulos independientes</strong> P·Q·R·S·T demostró que descomponer correctamente el problema es la mitad de la solución.</div>
+        <div class="concl-item oro">Especificar cada módulo antes de construirlo (requerimientos AHA 2021) redujo el tiempo de depuración en P5 de forma significativa.</div>
+      </div>
+    </div>
+
+    <div class="concl-card">
+      <div class="concl-card-head rojo-osc">
+        <div class="concl-pnum">05</div>
+        <div>
+          <div class="concl-ptag">Proyecto 5</div>
+          <div class="concl-ptitle">Validación funcional del prototipo</div>
+        </div>
+      </div>
+      <div class="concl-card-body">
+        <div class="concl-item rojo-osc">Los 6 parámetros verificados frente a señales de referencia AHA 2021 confirman que la señal sintetizada cumple los valores estándar.</div>
+        <div class="concl-item rojo-osc">Los 3 patrones ECG simulados (amplitud, polaridad, periodicidad) confirman la <strong>versatilidad del generador</strong> para la comparación experimental.</div>
+      </div>
+    </div>
+
+  </div><!-- /concl-grid -->
+
+  <div class="concl-general">
+    <div class="concl-gen-icon">ECG</div>
+    <div class="concl-gen-content">
+      <div class="concl-gen-label">Conclusión integradora de la ruta formativa</div>
+      <div class="concl-gen-text">
+        Cinco proyectos. Una ruta de formación en electrónica analógica. <em>Cada etapa preparó la siguiente.</em>
+      </div>
+      <div class="concl-gen-sub">
+        La ruta avanzó desde la apropiación de componentes hasta la <strong>validación funcional</strong> de un prototipo completo: <strong>P1</strong> construyó el vocabulario técnico con 5 topologías op-amp; <strong>P2</strong> ancló esos bloques a una necesidad real (CESURCAFÉ); <strong>P3</strong> superó la barrera entre protoboard y manufactura industrial; <strong>P4</strong> modeló los generadores P·Q·R·S·T antes de construir; y <strong>P5</strong> integró todo en un sintetizador ECG verificado experimentalmente frente a <strong>señales de referencia AHA 2021</strong>, incluyendo 3 patrones ECG simulados. Resultado: una ruta de aprendizaje documentada y replicable — componente → bloque funcional → PCB → arquitectura → prototipo validado funcionalmente.
+      </div>
+    </div>
+  </div>
+
+</div><!-- /conclusiones-section -->
+
+<!-- ══════════════════════════════════════════════════════════════
+     FOOTER
+     ══════════════════════════════════════════════════════════════ -->
+<div class="footer">
+  <div class="referencias">
+    <h4>Referencias</h4>
+    <ol>
+      <li>Sedra, A. S., &amp; Smith, K. C. (2020). <em>Microelectronic Circuits</em> (8th ed.). Oxford University Press. Cap. 8–11.</li>
+      <li>Ries, E. (2011). <em>The Lean Startup</em>. Crown Business. Referente metodológico de apoyo en P2 para la fase de identificación de necesidades con usuario real.</li>
+      <li>Horowitz, P., &amp; Hill, W. (2015). <em>The Art of Electronics</em> (3rd ed.). Cambridge University Press. Cap. 7.</li>
+      <li>Tompkins, W. J. (1993). <em>Biomedical Digital Signal Processing</em>. Prentice Hall. Morfología de la señal ECG y parámetros de referencia.</li>
+      <li>Ulaby, F. T., &amp; Maharbiz, M. M. (2010). <em>Circuits</em>. National Technology &amp; Science Press. Fundamentos de electrónica analógica para apropiación técnica en P1.</li>
+      <li>Texas Instruments. (2020). <em>TL07x Low-Noise JFET-Input Operational Amplifiers</em>. Datasheet SLOS081K.</li>
+      <li>Analog Devices. (2017). <em>AD620 Low Cost, Low Power Instrumentation Amplifier</em>. Datasheet AD620A/AD620B.</li>
+      <li>American Heart Association. (2021). Recommendations for ECG Standardization. <em>Circulation</em>, 143(5), e154–e161. Criterios de validación usados en P4–P5.</li>
+      <li>JLCPCB. (2024). <em>PCB Manufacturing Capabilities &amp; Design Rules</em>. jlcpcb.com/capabilities. Reglas DFM aplicadas en P3.</li>
+    </ol>
+  </div>
+
+  <div class="qr-area">
+
+    <!-- ── Emerson ── -->
+    <div class="qr-block">
+      <div class="qr-foto">
+        <img src="images/img_2.jpg" alt="Emerson Barrera"/>
+      </div>
+      <div class="qr-lbl">Emerson F. Barrera</div>
+      <div class="qr-box">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=https://portafolio-emerson" alt="QR Emerson"/>
+      </div>
+      <div class="qr-sub">20241221637</div>
+    </div>
+
+    <!-- ── Dominy ── -->
+    <div class="qr-block">
+      <div class="qr-foto">
+        <img src="images/img_3.jpg" alt="Dominy Cadena"/>
+      </div>
+      <div class="qr-lbl">Dominy M. Cadena</div>
+      <div class="qr-box">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=https://portafolio-dominy" alt="QR Dominy"/>
+      </div>
+      <div class="qr-sub">20241221638</div>
+    </div>
+
+    <!-- ── Daniel ── -->
+    <div class="qr-block">
+      <div class="qr-foto">
+        <img src="images/img_4.jpg" alt="Daniel Olarte"/>
+      </div>
+      <div class="qr-lbl">Daniel S. Olarte</div>
+      <div class="qr-box">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=https://portafolio-daniel" alt="QR Daniel"/>
+      </div>
+      <div class="qr-sub">20241221589</div>
+    </div>
+
+    <!-- ── Jerónimo ── -->
+    <div class="qr-block">
+      <div class="qr-foto">
+        <img src="images/img_5.jpg" alt="Jerónimo Pérez"/>
+      </div>
+      <div class="qr-lbl">Jerónimo Pérez</div>
+      <div class="qr-box">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=https://portafolio-jeronimo" alt="QR Jerónimo"/>
+      </div>
+      <div class="qr-sub">20241221419</div>
+    </div>
+
+  </div>
+
+  <div class="footer-right">
+    <div class="fr-title">Electrónica Analógica III</div>
+    <div class="fr-sub">
+      Universidad Surcolombiana<br>
+      Facultad de Ingeniería<br>
+      Programa de Ingeniería Electrónica<br>
+      Neiva, Huila — Colombia
+    </div>
+    <div class="fr-year">2026</div>
+  </div>
+</div>
+
+</div><!-- /poster -->
+</body>
+</html>
